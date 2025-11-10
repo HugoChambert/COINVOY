@@ -67,7 +67,6 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 0 2rem;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hero-title {

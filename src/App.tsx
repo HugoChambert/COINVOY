@@ -1,17 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { useEffect, useRef } from 'react'
 import './App.css'
 import Hero from './components/Hero'
 import Features from './components/Features'
 import Countries from './components/Countries'
 import CallToAction from './components/CallToAction'
-import Earth3D from './components/Earth3D'
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [scrollY, setScrollY] = useState(0)
-  const heroRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -112,7 +107,6 @@ function App() {
     const handleMouseMove = (e: MouseEvent) => {
       mouse.x = e.clientX
       mouse.y = e.clientY
-      setMousePosition({ x: e.clientX, y: e.clientY })
     }
 
     const handleResize = () => {
@@ -120,42 +114,24 @@ function App() {
       canvas.height = window.innerHeight
     }
 
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
-    }
-
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('resize', handleResize)
-    window.addEventListener('scroll', handleScroll)
     animate()
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('resize', handleResize)
-      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
-
-  const heroHeight = heroRef.current?.offsetHeight || 0
-  const earthVisible = scrollY > heroHeight
 
   return (
     <div className="app">
       <canvas ref={canvasRef} className="background-canvas" />
-      {earthVisible && (
-        <div className="three-canvas-container">
-          <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-            <Earth3D />
-          </Canvas>
-        </div>
-      )}
       <div className="content">
-        <div ref={heroRef}>
-          <Hero mousePosition={mousePosition} />
-        </div>
-        <Features mousePosition={mousePosition} />
-        <Countries mousePosition={mousePosition} />
-        <CallToAction mousePosition={mousePosition} />
+        <Hero />
+        <Features />
+        <Countries />
+        <CallToAction />
       </div>
     </div>
   )

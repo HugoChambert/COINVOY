@@ -1,13 +1,6 @@
-import { useEffect, useRef } from 'react'
 import './Countries.css'
 
-interface CountriesProps {
-  mousePosition: { x: number; y: number }
-}
-
-function Countries({ mousePosition }: CountriesProps) {
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([])
-
+function Countries() {
   const countries = [
     {
       name: 'France',
@@ -29,21 +22,6 @@ function Countries({ mousePosition }: CountriesProps) {
     },
   ]
 
-  useEffect(() => {
-    cardsRef.current.forEach((card) => {
-      if (!card) return
-
-      const rect = card.getBoundingClientRect()
-      const cardCenterX = rect.left + rect.width / 2
-      const cardCenterY = rect.top + rect.height / 2
-
-      const deltaX = (mousePosition.x - cardCenterX) / 140
-      const deltaY = (mousePosition.y - cardCenterY) / 140
-
-      card.style.transform = `translate(${deltaX}px, ${deltaY}px)`
-    })
-  }, [mousePosition])
-
   return (
     <section id="countries" className="countries">
       <div className="countries-container">
@@ -55,7 +33,6 @@ function Countries({ mousePosition }: CountriesProps) {
           {countries.map((country, index) => (
             <div
               key={index}
-              ref={(el) => (cardsRef.current[index] = el)}
               className="country-card glass-card"
             >
               <div className="country-flag">{country.flag}</div>
