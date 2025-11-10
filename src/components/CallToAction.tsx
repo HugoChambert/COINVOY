@@ -1,9 +1,30 @@
+import { useEffect, useRef } from 'react'
 import './CallToAction.css'
 
-function CallToAction() {
+interface CallToActionProps {
+  mousePosition: { x: number; y: number }
+}
+
+function CallToAction({ mousePosition }: CallToActionProps) {
+  const ctaContainerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = ctaContainerRef.current
+    if (!container) return
+
+    const rect = container.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+
+    const deltaX = (mousePosition.x - centerX) / 50
+    const deltaY = (mousePosition.y - centerY) / 50
+
+    container.style.transform = `translate(${deltaX}px, ${deltaY}px)`
+  }, [mousePosition])
+
   return (
     <section id="contact" className="cta">
-      <div className="cta-container">
+      <div ref={ctaContainerRef} className="cta-container glass-card">
         <h2 className="cta-title">Ready to Start Transferring?</h2>
         <p className="cta-description">
           Join thousands of users who trust CoinVoy for their international money transfers.

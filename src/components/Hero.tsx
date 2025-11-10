@@ -1,6 +1,27 @@
+import { useEffect, useRef } from 'react'
 import './Hero.css'
 
-function Hero() {
+interface HeroProps {
+  mousePosition: { x: number; y: number }
+}
+
+function Hero({ mousePosition }: HeroProps) {
+  const heroContentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const heroContent = heroContentRef.current
+    if (!heroContent) return
+
+    const rect = heroContent.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+
+    const deltaX = (mousePosition.x - centerX) / 80
+    const deltaY = (mousePosition.y - centerY) / 80
+
+    heroContent.style.transform = `translate(${deltaX}px, ${deltaY}px)`
+  }, [mousePosition])
+
   return (
     <section className="hero">
       <nav className="nav">
@@ -10,12 +31,12 @@ function Hero() {
             <a href="#features">Features</a>
             <a href="#countries">Countries</a>
             <a href="#contact">Contact</a>
-            <button className="nav-button">Get Started</button>
+            <button className="nav-button glass-card">Get Started</button>
           </div>
         </div>
       </nav>
 
-      <div className="hero-content">
+      <div ref={heroContentRef} className="hero-content">
         <h1 className="hero-title">
           Transfer Money Globally
           <br />
@@ -27,7 +48,7 @@ function Hero() {
         </p>
         <div className="hero-buttons">
           <button className="primary-button">Start Transfer</button>
-          <button className="secondary-button">Learn More</button>
+          <button className="secondary-button glass-card">Learn More</button>
         </div>
       </div>
     </section>

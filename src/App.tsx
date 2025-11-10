@@ -1,12 +1,14 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import Hero from './components/Hero'
 import Features from './components/Features'
 import Countries from './components/Countries'
 import CallToAction from './components/CallToAction'
+import FeeComparison from './components/FeeComparison'
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -107,6 +109,7 @@ function App() {
     const handleMouseMove = (e: MouseEvent) => {
       mouse.x = e.clientX
       mouse.y = e.clientY
+      setMousePosition({ x: e.clientX, y: e.clientY })
     }
 
     const handleResize = () => {
@@ -128,10 +131,11 @@ function App() {
     <div className="app">
       <canvas ref={canvasRef} className="background-canvas" />
       <div className="content">
-        <Hero />
-        <Features />
-        <Countries />
-        <CallToAction />
+        <Hero mousePosition={mousePosition} />
+        <FeeComparison mousePosition={mousePosition} />
+        <Features mousePosition={mousePosition} />
+        <Countries mousePosition={mousePosition} />
+        <CallToAction mousePosition={mousePosition} />
       </div>
     </div>
   )

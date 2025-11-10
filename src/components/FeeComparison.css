@@ -1,0 +1,205 @@
+.fee-comparison {
+  padding: 8rem 2rem;
+  background: #000000;
+  overflow: hidden;
+}
+
+.fee-comparison-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fee-header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.fee-subtitle {
+  font-size: 1.5rem;
+  color: #888888;
+  margin-top: 1rem;
+  font-weight: 300;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+.comparison-card {
+  padding: 3rem 2.5rem;
+  border-radius: 24px;
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.coinvoy-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.coinvoy-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.card-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.provider-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #ffffff;
+}
+
+.fee-amount {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.competitor-fee {
+  color: #888888;
+  background: none;
+  -webkit-text-fill-color: #888888;
+}
+
+.fee-label {
+  font-size: 1rem;
+  color: #888888;
+  margin-bottom: 1.5rem;
+}
+
+.transfer-time {
+  font-size: 1.125rem;
+  color: #aaaaaa;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.features-list li {
+  font-size: 1rem;
+  color: #cccccc;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.features-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.competitors-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.competitor-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.competitor-card:hover {
+  transform: translateY(-4px);
+}
+
+.savings-highlight {
+  padding: 2.5rem;
+  border-radius: 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.savings-text {
+  font-size: 1.75rem;
+  font-weight: 300;
+  color: #ffffff;
+}
+
+.savings-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  display: inline-block;
+  margin-right: 0.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, #aaaaaa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@media (max-width: 1024px) {
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .competitors-wrapper {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .fee-comparison {
+    padding: 4rem 1.5rem;
+  }
+
+  .fee-header {
+    margin-bottom: 3rem;
+  }
+
+  .fee-subtitle {
+    font-size: 1.25rem;
+  }
+
+  .comparison-grid {
+    gap: 2rem;
+  }
+
+  .competitors-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .fee-amount {
+    font-size: 3rem;
+  }
+
+  .savings-text {
+    font-size: 1.25rem;
+  }
+
+  .savings-amount {
+    font-size: 1.75rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+}
