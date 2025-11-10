@@ -4,11 +4,12 @@ import Hero from './components/Hero'
 import Features from './components/Features'
 import Countries from './components/Countries'
 import CallToAction from './components/CallToAction'
-import FeeComparison from './components/FeeComparison'
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const globeRef = useRef<HTMLDivElement>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [scrollY, setScrollY] = useState(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -117,22 +118,41 @@ function App() {
       canvas.height = window.innerHeight
     }
 
+    const handleScroll = () => {
+      setScrollY(window.scrollY)
+    }
+
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('resize', handleResize)
+    window.addEventListener('scroll', handleScroll)
     animate()
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('resize', handleResize)
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
+  useEffect(() => {
+    const globe = globeRef.current
+    if (!globe) return
+
+    const rotationX = scrollY * 0.05
+    const rotationY = mousePosition.x * 0.02
+    const translateY = scrollY * 0.3
+
+    globe.style.transform = `translateY(${translateY}px) rotateX(${rotationX}deg) rotateY(${rotationY}deg)`
+  }, [scrollY, mousePosition])
 
   return (
     <div className="app">
       <canvas ref={canvasRef} className="background-canvas" />
+      <div ref={globeRef} className="globe-container">
+        <div className="globe"></div>
+      </div>
       <div className="content">
         <Hero mousePosition={mousePosition} />
-        <FeeComparison mousePosition={mousePosition} />
         <Features mousePosition={mousePosition} />
         <Countries mousePosition={mousePosition} />
         <CallToAction mousePosition={mousePosition} />
