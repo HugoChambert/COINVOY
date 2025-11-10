@@ -37,8 +37,8 @@ function Countries({ mousePosition }: CountriesProps) {
       const cardCenterX = rect.left + rect.width / 2
       const cardCenterY = rect.top + rect.height / 2
 
-      const deltaX = (mousePosition.x - cardCenterX) / 70
-      const deltaY = (mousePosition.y - cardCenterY) / 70
+      const deltaX = (mousePosition.x - cardCenterX) / 140
+      const deltaY = (mousePosition.y - cardCenterY) / 140
 
       card.style.transform = `translate(${deltaX}px, ${deltaY}px)`
     })

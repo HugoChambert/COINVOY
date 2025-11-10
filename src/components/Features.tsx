@@ -35,8 +35,8 @@ function Features({ mousePosition }: FeaturesProps) {
       const cardCenterX = rect.left + rect.width / 2
       const cardCenterY = rect.top + rect.height / 2
 
-      const deltaX = (mousePosition.x - cardCenterX) / 60
-      const deltaY = (mousePosition.y - cardCenterY) / 60
+      const deltaX = (mousePosition.x - cardCenterX) / 120
+      const deltaY = (mousePosition.y - cardCenterY) / 120
 
       card.style.transform = `translate(${deltaX}px, ${deltaY}px)`
     })

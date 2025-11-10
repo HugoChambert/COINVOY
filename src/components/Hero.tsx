@@ -16,8 +16,8 @@ function Hero({ mousePosition }: HeroProps) {
     const centerX = rect.left + rect.width / 2
     const centerY = rect.top + rect.height / 2
 
-    const deltaX = (mousePosition.x - centerX) / 80
-    const deltaY = (mousePosition.y - centerY) / 80
+    const deltaX = (mousePosition.x - centerX) / 150
+    const deltaY = (mousePosition.y - centerY) / 150
 
     heroContent.style.transform = `translate(${deltaX}px, ${deltaY}px)`
   }, [mousePosition])

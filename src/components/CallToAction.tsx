@@ -16,8 +16,8 @@ function CallToAction({ mousePosition }: CallToActionProps) {
     const centerX = rect.left + rect.width / 2
     const centerY = rect.top + rect.height / 2
 
-    const deltaX = (mousePosition.x - centerX) / 50
-    const deltaY = (mousePosition.y - centerY) / 50
+    const deltaX = (mousePosition.x - centerX) / 100
+    const deltaY = (mousePosition.y - centerY) / 100
 
     container.style.transform = `translate(${deltaX}px, ${deltaY}px)`
   }, [mousePosition])

@@ -1,27 +1,10 @@
-import { useEffect, useRef } from 'react'
 import './FeeComparison.css'
 
 interface FeeComparisonProps {
   mousePosition: { x: number; y: number }
 }
 
-function FeeComparison({ mousePosition }: FeeComparisonProps) {
-  const sectionRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const section = sectionRef.current
-    if (!section) return
-
-    const rect = section.getBoundingClientRect()
-    const sectionCenterX = rect.left + rect.width / 2
-    const sectionCenterY = rect.top + rect.height / 2
-
-    const deltaX = (mousePosition.x - sectionCenterX) / 50
-    const deltaY = (mousePosition.y - sectionCenterY) / 50
-
-    section.style.transform = `translate(${deltaX}px, ${deltaY}px)`
-  }, [mousePosition])
-
+function FeeComparison({}: FeeComparisonProps) {
   const competitors = [
     { name: 'Traditional Bank', fee: '$45', time: '3-5 days' },
     { name: 'Western Union', fee: '$35', time: '1-2 days' },
@@ -30,11 +13,11 @@ function FeeComparison({ mousePosition }: FeeComparisonProps) {
 
   return (
     <section className="fee-comparison">
-      <div ref={sectionRef} className="fee-comparison-container">
+      <div className="fee-comparison-container">
         <div className="fee-header">
-          <h2 className="section-title">Stop Overpaying for Transfers</h2>
+          <h2 className="section-title">Transparent Pricing</h2>
           <p className="fee-subtitle">
-            Save up to 90% on international transfer fees
+            Compare our low fees with traditional services
           </p>
         </div>
 
@@ -62,12 +45,6 @@ function FeeComparison({ mousePosition }: FeeComparisonProps) {
                 <div className="transfer-time">{competitor.time}</div>
               </div>
             ))}
-          </div>
-        </div>
-
-        <div className="savings-highlight glass-card">
-          <div className="savings-text">
-            <span className="savings-amount">Save $42.50</span> on every $1,000 transfer
           </div>
         </div>
       </div>

@@ -26,7 +26,6 @@
   display: grid;
   grid-template-columns: 1fr 1.5fr;
   gap: 3rem;
-  margin-bottom: 4rem;
 }
 
 .comparison-card {
@@ -133,30 +132,6 @@
   transform: translateY(-4px);
 }
 
-.savings-highlight {
-  padding: 2.5rem;
-  border-radius: 20px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.savings-text {
-  font-size: 1.75rem;
-  font-weight: 300;
-  color: #ffffff;
-}
-
-.savings-amount {
-  font-size: 2.5rem;
-  font-weight: 700;
-  display: inline-block;
-  margin-right: 0.5rem;
-  background: linear-gradient(135deg, #ffffff 0%, #aaaaaa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
 
 @media (max-width: 1024px) {
   .comparison-grid {
@@ -191,15 +166,5 @@
 
   .fee-amount {
     font-size: 3rem;
-  }
-
-  .savings-text {
-    font-size: 1.25rem;
-  }
-
-  .savings-amount {
-    font-size: 1.75rem;
-    display: block;
-    margin-bottom: 0.5rem;
   }
 }
