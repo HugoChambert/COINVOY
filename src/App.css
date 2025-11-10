@@ -18,92 +18,15 @@
   opacity: 0.4;
 }
 
-.globe-container {
+.three-canvas-container {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  height: 400px;
-  margin-left: -200px;
-  margin-top: -200px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
-  perspective: 1500px;
-  transition: transform 0.3s ease-out;
   opacity: 0.5;
-}
-
-.globe {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 35% 35%, #1e4d7b, #0a1f3d);
-  position: relative;
-  transform-style: preserve-3d;
-  box-shadow:
-    inset -60px -60px 120px rgba(0, 0, 0, 0.8),
-    inset 30px 30px 80px rgba(100, 150, 255, 0.15),
-    0 0 100px rgba(100, 150, 255, 0.2),
-    0 20px 60px rgba(0, 0, 0, 0.6);
-  transition: transform 0.1s ease-out;
-}
-
-.globe::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background:
-    radial-gradient(ellipse 40px 60px at 25% 25%, rgba(80, 160, 80, 0.6), transparent 50%),
-    radial-gradient(ellipse 70px 50px at 65% 30%, rgba(80, 160, 80, 0.55), transparent 50%),
-    radial-gradient(ellipse 35px 55px at 50% 65%, rgba(80, 160, 80, 0.5), transparent 50%),
-    radial-gradient(ellipse 55px 45px at 18% 55%, rgba(80, 160, 80, 0.55), transparent 50%),
-    radial-gradient(ellipse 60px 50px at 82% 35%, rgba(80, 160, 80, 0.5), transparent 50%),
-    radial-gradient(ellipse 45px 60px at 55% 18%, rgba(80, 160, 80, 0.48), transparent 50%),
-    radial-gradient(ellipse 65px 45px at 35% 80%, rgba(80, 160, 80, 0.52), transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(70, 140, 200, 0.3), transparent);
-  transform-origin: center;
-  transform-style: preserve-3d;
-}
-
-.globe::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 18px,
-      rgba(150, 200, 255, 0.08) 18px,
-      rgba(150, 200, 255, 0.08) 19px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 18px,
-      rgba(150, 200, 255, 0.08) 18px,
-      rgba(150, 200, 255, 0.08) 19px
-    );
-  transform-origin: center;
-  transform-style: preserve-3d;
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .content {
@@ -111,14 +34,6 @@
   z-index: 1;
 }
 
-@media (max-width: 768px) {
-  .globe-container {
-    width: 280px;
-    height: 280px;
-    margin-left: -140px;
-    margin-top: -140px;
-  }
-}
 
 .glass-card {
   background: rgba(255, 255, 255, 0.03);

@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
+import { Canvas } from '@react-three/fiber'
 import './App.css'
 import Hero from './components/Hero'
 import Features from './components/Features'
 import Countries from './components/Countries'
 import CallToAction from './components/CallToAction'
+import Earth3D from './components/Earth3D'
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const globeRef = useRef<HTMLDivElement>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [scrollY, setScrollY] = useState(0)
+  const heroRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -134,33 +136,23 @@ function App() {
     }
   }, [])
 
-  useEffect(() => {
-    const globe = globeRef.current
-    if (!globe) return
-
-    const globeElement = globe.querySelector('.globe') as HTMLElement
-    if (!globeElement) return
-
-    const rotationY = scrollY * 0.5
-    const rotationX = (mousePosition.y / window.innerHeight - 0.5) * 20
-    const translateY = scrollY * 0.15
-
-    globe.style.transform = `translateY(${translateY}px)`
-
-    const beforeElement = globeElement
-    if (beforeElement) {
-      beforeElement.style.transform = `rotateY(${rotationY}deg) rotateX(${rotationX}deg)`
-    }
-  }, [scrollY, mousePosition])
+  const heroHeight = heroRef.current?.offsetHeight || 0
+  const earthVisible = scrollY > heroHeight
 
   return (
     <div className="app">
       <canvas ref={canvasRef} className="background-canvas" />
-      <div ref={globeRef} className="globe-container">
-        <div className="globe"></div>
-      </div>
+      {earthVisible && (
+        <div className="three-canvas-container">
+          <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+            <Earth3D />
+          </Canvas>
+        </div>
+      )}
       <div className="content">
-        <Hero mousePosition={mousePosition} />
+        <div ref={heroRef}>
+          <Hero mousePosition={mousePosition} />
+        </div>
         <Features mousePosition={mousePosition} />
         <Countries mousePosition={mousePosition} />
         <CallToAction mousePosition={mousePosition} />
