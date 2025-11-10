@@ -138,16 +138,24 @@ function App() {
     const globe = globeRef.current
     if (!globe) return
 
+    const globeElement = globe.querySelector('.globe') as HTMLElement
+    if (!globeElement) return
+
     const scrollProgress = Math.min(scrollY / 800, 1)
     const scale = 1 + scrollProgress * 2
     const opacity = 0.3 + scrollProgress * 0.7
 
-    const rotationX = scrollY * 0.1
-    const rotationY = mousePosition.x * 0.01
+    const rotationY = scrollY * 0.5
+    const rotationX = (mousePosition.y / window.innerHeight - 0.5) * 20
     const translateY = scrollY * 0.15
 
-    globe.style.transform = `translateY(${translateY}px) rotateX(${rotationX}deg) rotateY(${rotationY}deg) scale(${scale})`
+    globe.style.transform = `translateY(${translateY}px) scale(${scale})`
     globe.style.opacity = `${opacity}`
+
+    const beforeElement = globeElement
+    if (beforeElement) {
+      beforeElement.style.transform = `rotateY(${rotationY}deg) rotateX(${rotationX}deg)`
+    }
   }, [scrollY, mousePosition])
 
   return (
