@@ -29,20 +29,26 @@
   z-index: 0;
   pointer-events: none;
   perspective: 1000px;
-  transition: transform 0.1s ease-out;
+  transition: transform 0.3s ease-out, opacity 0.5s ease-out;
+  opacity: 0.3;
 }
 
 .globe {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background:
+    radial-gradient(circle at 30% 30%, rgba(100, 150, 255, 0.15), rgba(20, 40, 80, 0.1)),
+    radial-gradient(circle at 70% 70%, rgba(50, 100, 200, 0.1), rgba(10, 20, 40, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow:
-    inset 0 0 60px rgba(255, 255, 255, 0.02),
-    0 0 80px rgba(255, 255, 255, 0.02);
+    inset 0 0 100px rgba(100, 150, 255, 0.1),
+    inset 0 0 50px rgba(255, 255, 255, 0.05),
+    0 0 150px rgba(100, 150, 255, 0.1),
+    0 0 80px rgba(255, 255, 255, 0.05);
   position: relative;
   overflow: hidden;
+  transition: all 0.8s ease-out;
 }
 
 .globe::before {
@@ -52,33 +58,51 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 20px,
-    rgba(255, 255, 255, 0.02) 20px,
-    rgba(255, 255, 255, 0.02) 21px
-  );
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 18px,
+      rgba(150, 200, 255, 0.08) 18px,
+      rgba(150, 200, 255, 0.08) 19px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 18px,
+      rgba(150, 200, 255, 0.08) 18px,
+      rgba(150, 200, 255, 0.08) 19px
+    );
   border-radius: 50%;
-  animation: rotate 60s linear infinite;
+  animation: rotate 80s linear infinite;
 }
 
 .globe::after {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent,
-    transparent 20px,
-    rgba(255, 255, 255, 0.02) 20px,
-    rgba(255, 255, 255, 0.02) 21px
+  top: 20%;
+  left: 20%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(
+    circle at center,
+    rgba(100, 200, 100, 0.15),
+    transparent 30%
   );
   border-radius: 50%;
-  animation: rotate 60s linear infinite;
+  filter: blur(20px);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
 }
 
 @keyframes rotate {
@@ -105,16 +129,42 @@
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(30px) saturate(150%);
+  -webkit-backdrop-filter: blur(30px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
 }
 
 .glass-card:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 16px 64px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
 }

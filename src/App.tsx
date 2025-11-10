@@ -138,11 +138,16 @@ function App() {
     const globe = globeRef.current
     if (!globe) return
 
-    const rotationX = scrollY * 0.05
-    const rotationY = mousePosition.x * 0.02
-    const translateY = scrollY * 0.3
+    const scrollProgress = Math.min(scrollY / 800, 1)
+    const scale = 1 + scrollProgress * 2
+    const opacity = 0.3 + scrollProgress * 0.7
 
-    globe.style.transform = `translateY(${translateY}px) rotateX(${rotationX}deg) rotateY(${rotationY}deg)`
+    const rotationX = scrollY * 0.1
+    const rotationY = mousePosition.x * 0.01
+    const translateY = scrollY * 0.15
+
+    globe.style.transform = `translateY(${translateY}px) rotateX(${rotationX}deg) rotateY(${rotationY}deg) scale(${scale})`
+    globe.style.opacity = `${opacity}`
   }, [scrollY, mousePosition])
 
   return (
