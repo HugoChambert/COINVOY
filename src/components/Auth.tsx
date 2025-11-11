@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { supabase } from '../lib/supabase'
 import './Auth.css'
 
 function Auth() {
@@ -21,31 +22,35 @@ function Auth() {
     setIsSubmitting(true)
 
     try {
-      const endpoint = isSignUp ? '/auth/v1/signup' : '/auth/v1/token?grant_type=password'
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}${endpoint}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
-        },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        setMessage({
-          type: 'success',
-          text: isSignUp ? 'Account created successfully!' : 'Signed in successfully!'
+      if (isSignUp) {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password
         })
-        setEmail('')
-        setPassword('')
-        setConfirmPassword('')
+
+        if (error) {
+          setMessage({
+            type: 'error',
+            text: error.message
+          })
+        } else {
+          setMessage({
+            type: 'success',
+            text: 'Account created successfully!'
+          })
+        }
       } else {
-        setMessage({
-          type: 'error',
-          text: data.error_description || data.msg || 'Something went wrong. Please try again.'
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password
         })
+
+        if (error) {
+          setMessage({
+            type: 'error',
+            text: error.message
+          })
+        }
       }
     } catch (error) {
       setMessage({ type: 'error', text: 'Network error. Please try again.' })

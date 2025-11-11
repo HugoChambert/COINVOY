@@ -5,10 +5,41 @@ import Features from './components/Features'
 import Countries from './components/Countries'
 import CallToAction from './components/CallToAction'
 import Auth from './components/Auth'
+import Dashboard from './components/Dashboard'
+import { supabase } from './lib/supabase'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'auth'>('home')
+  const [currentPage, setCurrentPage] = useState<'home' | 'auth' | 'dashboard'>('home')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [loading, setLoading] = useState(true)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+
+    if (session) {
+      setIsAuthenticated(true)
+      setCurrentPage('dashboard')
+    }
+
+    setLoading(false)
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setIsAuthenticated(true)
+        setCurrentPage('dashboard')
+      } else {
+        setIsAuthenticated(false)
+        setCurrentPage('home')
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -125,6 +156,27 @@ function App() {
       window.removeEventListener('resize', handleResize)
     }
   }, [])
+
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
+      }}>
+        <div style={{ color: 'white' }}>Loading...</div>
+      </div>
+    )
+  }
+
+  if (currentPage === 'dashboard' && isAuthenticated) {
+    return <Dashboard onLogout={() => {
+      setIsAuthenticated(false)
+      setCurrentPage('home')
+    }} />
+  }
 
   if (currentPage === 'auth') {
     return <Auth />
