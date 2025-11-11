@@ -1,7 +1,11 @@
 import { useRef, useState } from 'react'
 import './CallToAction.css'
 
-function CallToAction() {
+interface CallToActionProps {
+  onNavigateToAuth: () => void
+}
+
+function CallToAction({ onNavigateToAuth }: CallToActionProps) {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [btnPosition, setBtnPosition] = useState({ x: 0, y: 0 })
 
@@ -24,6 +28,7 @@ function CallToAction() {
         <button
           ref={btnRef}
           className="cta-button"
+          onClick={onNavigateToAuth}
           onMouseMove={handleMouseMove}
           style={{
             '--x': `${btnPosition.x}px`,

@@ -1,7 +1,13 @@
 import { useRef, useState, useEffect } from 'react'
+import ContactForm from './ContactForm'
 import './Hero.css'
 
-function Hero() {
+interface HeroProps {
+  onNavigateToAuth: () => void
+}
+
+function Hero({ onNavigateToAuth }: HeroProps) {
+  const [showContactForm, setShowContactForm] = useState(false)
   const primaryBtnRef = useRef<HTMLButtonElement>(null)
   const getStartedBtnRef = useRef<HTMLButtonElement>(null)
   const [primaryBtnPosition, setPrimaryBtnPosition] = useState({ x: 0, y: 0 })
@@ -88,13 +94,19 @@ function Hero() {
               </button>
               {openDropdown === 'contact' && (
                 <div className="dropdown-menu">
-                  <div className="dropdown-empty">Coming soon</div>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => setShowContactForm(true)}
+                  >
+                    Contact Us
+                  </button>
                 </div>
               )}
             </div>
             <button
               ref={getStartedBtnRef}
               className="nav-button"
+              onClick={onNavigateToAuth}
               onMouseMove={handleGetStartedMouseMove}
               style={{
                 '--x': `${getStartedBtnPosition.x}px`,
@@ -121,6 +133,7 @@ function Hero() {
           <button
             ref={primaryBtnRef}
             className="primary-button"
+            onClick={onNavigateToAuth}
             onMouseMove={handlePrimaryMouseMove}
             style={{
               '--x': `${primaryBtnPosition.x}px`,
@@ -132,6 +145,7 @@ function Hero() {
           <button className="secondary-button glass-card">Learn More</button>
         </div>
       </div>
+      {showContactForm && <ContactForm onClose={() => setShowContactForm(false)} />}
     </section>
   )
 }

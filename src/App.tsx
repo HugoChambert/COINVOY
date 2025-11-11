@@ -1,11 +1,13 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import Hero from './components/Hero'
 import Features from './components/Features'
 import Countries from './components/Countries'
 import CallToAction from './components/CallToAction'
+import Auth from './components/Auth'
 
 function App() {
+  const [currentPage, setCurrentPage] = useState<'home' | 'auth'>('home')
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -124,14 +126,18 @@ function App() {
     }
   }, [])
 
+  if (currentPage === 'auth') {
+    return <Auth />
+  }
+
   return (
     <div className="app">
       <canvas ref={canvasRef} className="background-canvas" />
       <div className="content">
-        <Hero />
+        <Hero onNavigateToAuth={() => setCurrentPage('auth')} />
         <Features />
         <Countries />
-        <CallToAction />
+        <CallToAction onNavigateToAuth={() => setCurrentPage('auth')} />
       </div>
     </div>
   )

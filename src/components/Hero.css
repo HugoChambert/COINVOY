@@ -79,7 +79,7 @@
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 1rem);
+  top: calc(100% + 0.5rem);
   left: 50%;
   transform: translateX(-50%);
   background: rgba(20, 20, 20, 0.95);
@@ -91,6 +91,16 @@
   z-index: 1000;
   animation: dropdownFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -0.5rem;
+  left: 0;
+  right: 0;
+  height: 0.5rem;
+  background: transparent;
 }
 
 @keyframes dropdownFadeIn {
@@ -115,6 +125,11 @@
   transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.95rem;
   position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
 }
 
 .dropdown-item::after {
