@@ -5,6 +5,8 @@ import WalletConnect from './WalletConnect';
 import BankConnect from './BankConnect';
 import Transfer from './Transfer';
 import LanguageSwitcher from './LanguageSwitcher';
+import ThemeSwitcher from './ThemeSwitcher';
+import { useLanguage } from '../contexts/LanguageContext';
 import './Dashboard.css';
 
 interface DashboardProps {
@@ -12,6 +14,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ onLogout }: DashboardProps) {
+  const { t } = useLanguage();
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -53,38 +56,39 @@ export default function Dashboard({ onLogout }: DashboardProps) {
         </div>
         <div className="dashboard-user">
           <span className="user-email">{user?.email}</span>
+          <ThemeSwitcher />
           <LanguageSwitcher />
-          <button onClick={handleLogout} className="logout-btn">Sign Out</button>
+          <button onClick={handleLogout} className="logout-btn">{t('nav.signOut')}</button>
         </div>
       </header>
 
       <div className="dashboard-container">
         <div className="dashboard-sidebar">
           <nav className="dashboard-nav">
-            <button className="nav-item active">Dashboard</button>
-            <button className="nav-item">Transactions</button>
-            <button className="nav-item">Settings</button>
+            <button className="nav-item active">{t('dashboard.title')}</button>
+            <button className="nav-item">{t('dashboard.transactions')}</button>
+            <button className="nav-item">{t('dashboard.settings')}</button>
           </nav>
         </div>
 
         <main className="dashboard-main">
           <div className="dashboard-grid">
             <div className="dashboard-section rates-section">
-              <h2>Live Exchange Rates</h2>
+              <h2>{t('dashboard.liveRates')}</h2>
               <ExchangeRates />
             </div>
 
-            <div className="dashboard-section transfer-section">
-              <h2>Send Money</h2>
-              <Transfer />
-            </div>
-
             <div className="dashboard-section accounts-section">
-              <h2>Connected Accounts</h2>
+              <h2>{t('dashboard.connectedAccounts')}</h2>
               <div className="accounts-grid">
                 <WalletConnect userId={user?.id} />
                 <BankConnect userId={user?.id} />
               </div>
+            </div>
+
+            <div className="dashboard-section transfer-section">
+              <h2>{t('dashboard.sendMoney')}</h2>
+              <Transfer />
             </div>
           </div>
         </main>

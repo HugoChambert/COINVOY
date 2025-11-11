@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect } from 'react'
 import ContactForm from './ContactForm'
 import LanguageSwitcher from './LanguageSwitcher'
+import ThemeSwitcher from './ThemeSwitcher'
+import { useLanguage } from '../contexts/LanguageContext'
 import './Hero.css'
 
 interface HeroProps {
@@ -8,6 +10,7 @@ interface HeroProps {
 }
 
 function Hero({ onNavigateToAuth }: HeroProps) {
+  const { t } = useLanguage()
   const [showContactForm, setShowContactForm] = useState(false)
   const primaryBtnRef = useRef<HTMLButtonElement>(null)
   const getStartedBtnRef = useRef<HTMLButtonElement>(null)
@@ -58,7 +61,7 @@ function Hero({ onNavigateToAuth }: HeroProps) {
               onMouseLeave={() => setOpenDropdown(null)}
             >
               <button className="nav-link-button">
-                Features
+                {t('nav.features')}
               </button>
               {openDropdown === 'features' && (
                 <div className="dropdown-menu">
@@ -72,7 +75,7 @@ function Hero({ onNavigateToAuth }: HeroProps) {
               onMouseLeave={() => setOpenDropdown(null)}
             >
               <button className="nav-link-button">
-                Countries
+                {t('nav.countries')}
               </button>
               {openDropdown === 'countries' && (
                 <div className="dropdown-menu">
@@ -91,7 +94,7 @@ function Hero({ onNavigateToAuth }: HeroProps) {
               onMouseLeave={() => setOpenDropdown(null)}
             >
               <button className="nav-link-button">
-                Contact
+                {t('nav.contact')}
               </button>
               {openDropdown === 'contact' && (
                 <div className="dropdown-menu">
@@ -104,6 +107,7 @@ function Hero({ onNavigateToAuth }: HeroProps) {
                 </div>
               )}
             </div>
+            <ThemeSwitcher />
             <LanguageSwitcher />
             <button
               ref={getStartedBtnRef}
@@ -115,7 +119,7 @@ function Hero({ onNavigateToAuth }: HeroProps) {
                 '--y': `${getStartedBtnPosition.y}px`,
               } as React.CSSProperties}
             >
-              Get Started
+              {t('nav.getStarted')}
             </button>
           </div>
         </div>
@@ -123,13 +127,12 @@ function Hero({ onNavigateToAuth }: HeroProps) {
 
       <div className="hero-content">
         <h1 className="hero-title">
-          Transfer Money Globally
+          {t('hero.title')}
           <br />
-          <span className="gradient-text">With Crypto Speed</span>
+          <span className="gradient-text">{t('hero.subtitle')}</span>
         </h1>
         <p className="hero-description">
-          Send money to France, America, and Thailand instantly using cryptocurrency.
-          Fast, secure, and transparent international transfers.
+          {t('hero.description')}
         </p>
         <div className="hero-buttons">
           <button
@@ -142,9 +145,9 @@ function Hero({ onNavigateToAuth }: HeroProps) {
               '--y': `${primaryBtnPosition.y}px`,
             } as React.CSSProperties}
           >
-            Start Transfer
+            {t('hero.startTransfer')}
           </button>
-          <button className="secondary-button glass-card">Learn More</button>
+          <button className="secondary-button glass-card">{t('hero.learnMore')}</button>
         </div>
       </div>
       {showContactForm && <ContactForm onClose={() => setShowContactForm(false)} />}

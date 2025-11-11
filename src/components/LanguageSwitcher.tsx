@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import './LanguageSwitcher.css';
 
 interface Language {
-  code: string;
+  code: 'en' | 'fr' | 'th';
   name: string;
   flag: string;
 }
@@ -14,11 +15,13 @@ const languages: Language[] = [
 ];
 
 export default function LanguageSwitcher() {
-  const [currentLanguage, setCurrentLanguage] = useState<Language>(languages[0]);
+  const { language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLanguageChange = (language: Language) => {
-    setCurrentLanguage(language);
+  const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
+
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang.code);
     setIsOpen(false);
   };
 

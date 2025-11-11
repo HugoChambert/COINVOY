@@ -174,3 +174,66 @@
     grid-template-columns: 1fr;
   }
 }
+
+[data-theme="light"] .dashboard {
+  background: #ffffff;
+}
+
+[data-theme="light"] .dashboard-header {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .dashboard-logo h1 {
+  color: #000000;
+}
+
+[data-theme="light"] .user-email {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="light"] .logout-btn {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #dc2626;
+}
+
+[data-theme="light"] .logout-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+[data-theme="light"] .dashboard-sidebar {
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .nav-item {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .nav-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+[data-theme="light"] .nav-item.active {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+  border-left-color: #2563eb;
+}
+
+[data-theme="light"] .dashboard-section {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .dashboard-section:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="light"] .dashboard-section h2 {
+  color: #000000;
+}
