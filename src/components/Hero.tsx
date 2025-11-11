@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import ContactForm from './ContactForm'
+import LanguageSwitcher from './LanguageSwitcher'
 import './Hero.css'
 
 interface HeroProps {
@@ -103,6 +104,7 @@ function Hero({ onNavigateToAuth }: HeroProps) {
                 </div>
               )}
             </div>
+            <LanguageSwitcher />
             <button
               ref={getStartedBtnRef}
               className="nav-button"

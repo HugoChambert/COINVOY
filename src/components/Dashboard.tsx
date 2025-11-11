@@ -4,6 +4,7 @@ import ExchangeRates from './ExchangeRates';
 import WalletConnect from './WalletConnect';
 import BankConnect from './BankConnect';
 import Transfer from './Transfer';
+import LanguageSwitcher from './LanguageSwitcher';
 import './Dashboard.css';
 
 interface DashboardProps {
@@ -52,6 +53,7 @@ export default function Dashboard({ onLogout }: DashboardProps) {
         </div>
         <div className="dashboard-user">
           <span className="user-email">{user?.email}</span>
+          <LanguageSwitcher />
           <button onClick={handleLogout} className="logout-btn">Sign Out</button>
         </div>
       </header>
