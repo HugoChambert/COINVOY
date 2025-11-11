@@ -179,3 +179,72 @@
   background: rgba(239, 68, 68, 0.2);
   border-color: rgba(239, 68, 68, 0.5);
 }
+
+[data-theme="light"] .wallet-connect {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .wallet-header h3 {
+  color: #000000;
+}
+
+[data-theme="light"] .add-wallet-form {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .form-group label {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="light"] .form-select,
+[data-theme="light"] .form-input {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: #000000;
+}
+
+[data-theme="light"] .form-select:focus,
+[data-theme="light"] .form-input:focus {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .form-select option {
+  background: #ffffff;
+  color: #000000;
+}
+
+[data-theme="light"] .submit-btn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+[data-theme="light"] .submit-btn:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+[data-theme="light"] .empty-state {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="light"] .wallet-item {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .wallet-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .wallet-icon {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+[data-theme="light"] .wallet-type {
+  color: #000000;
+}
+
+[data-theme="light"] .wallet-address {
+  color: rgba(0, 0, 0, 0.5);
+}

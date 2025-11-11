@@ -164,3 +164,59 @@
     flex-direction: column;
   }
 }
+
+[data-theme="light"] .tab {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .tab:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+[data-theme="light"] .tab.active {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+}
+
+[data-theme="light"] .form-group label {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="light"] .form-select,
+[data-theme="light"] .form-input {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: #000000;
+}
+
+[data-theme="light"] .form-select:focus,
+[data-theme="light"] .form-input:focus {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .form-select option {
+  background: #ffffff;
+  color: #000000;
+}
+
+[data-theme="light"] .transfer-btn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+[data-theme="light"] .transfer-btn:hover:not(:disabled) {
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+[data-theme="light"] .transfer-info {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .info-label {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .info-value {
+  color: #000000;
+}
