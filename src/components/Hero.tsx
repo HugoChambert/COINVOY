@@ -1,6 +1,28 @@
+import { useRef, useState } from 'react'
 import './Hero.css'
 
 function Hero() {
+  const primaryBtnRef = useRef<HTMLButtonElement>(null)
+  const getStartedBtnRef = useRef<HTMLButtonElement>(null)
+  const [primaryBtnPosition, setPrimaryBtnPosition] = useState({ x: 0, y: 0 })
+  const [getStartedBtnPosition, setGetStartedBtnPosition] = useState({ x: 0, y: 0 })
+
+  const handlePrimaryMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!primaryBtnRef.current) return
+    const rect = primaryBtnRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    setPrimaryBtnPosition({ x, y })
+  }
+
+  const handleGetStartedMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!getStartedBtnRef.current) return
+    const rect = getStartedBtnRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    setGetStartedBtnPosition({ x, y })
+  }
+
   return (
     <section className="hero">
       <nav className="nav">
@@ -10,7 +32,17 @@ function Hero() {
             <a href="#features">Features</a>
             <a href="#countries">Countries</a>
             <a href="#contact">Contact</a>
-            <button className="nav-button glass-card">Get Started</button>
+            <button
+              ref={getStartedBtnRef}
+              className="nav-button glass-card"
+              onMouseMove={handleGetStartedMouseMove}
+              style={{
+                '--x': `${getStartedBtnPosition.x}px`,
+                '--y': `${getStartedBtnPosition.y}px`,
+              } as React.CSSProperties}
+            >
+              Get Started
+            </button>
           </div>
         </div>
       </nav>
@@ -26,7 +58,17 @@ function Hero() {
           Fast, secure, and transparent international transfers.
         </p>
         <div className="hero-buttons">
-          <button className="primary-button">Start Transfer</button>
+          <button
+            ref={primaryBtnRef}
+            className="primary-button"
+            onMouseMove={handlePrimaryMouseMove}
+            style={{
+              '--x': `${primaryBtnPosition.x}px`,
+              '--y': `${primaryBtnPosition.y}px`,
+            } as React.CSSProperties}
+          >
+            Start Transfer
+          </button>
           <button className="secondary-button glass-card">Learn More</button>
         </div>
       </div>
