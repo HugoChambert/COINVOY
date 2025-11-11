@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import './Hero.css'
 
 function Hero() {
@@ -7,6 +7,7 @@ function Hero() {
   const [primaryBtnPosition, setPrimaryBtnPosition] = useState({ x: 0, y: 0 })
   const [getStartedBtnPosition, setGetStartedBtnPosition] = useState({ x: 0, y: 0 })
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [isScrolled, setIsScrolled] = useState(false)
 
   const countries = [
     { name: 'France', flag: '🇫🇷' },
@@ -14,9 +15,13 @@ function Hero() {
     { name: 'Thailand', flag: '🇹🇭' },
   ]
 
-  const toggleDropdown = (dropdown: string) => {
-    setOpenDropdown(openDropdown === dropdown ? null : dropdown)
-  }
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const handlePrimaryMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!primaryBtnRef.current) return
@@ -36,15 +41,16 @@ function Hero() {
 
   return (
     <section className="hero">
-      <nav className="nav">
+      <nav className={`nav ${isScrolled ? 'nav-scrolled' : ''}`}>
         <div className="nav-container">
           <div className="logo">CoinVoy</div>
           <div className="nav-links">
-            <div className="nav-dropdown">
-              <button
-                className="nav-link-button"
-                onClick={() => toggleDropdown('features')}
-              >
+            <div
+              className="nav-dropdown"
+              onMouseEnter={() => setOpenDropdown('features')}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              <button className="nav-link-button">
                 Features
               </button>
               {openDropdown === 'features' && (
@@ -53,11 +59,12 @@ function Hero() {
                 </div>
               )}
             </div>
-            <div className="nav-dropdown">
-              <button
-                className="nav-link-button"
-                onClick={() => toggleDropdown('countries')}
-              >
+            <div
+              className="nav-dropdown"
+              onMouseEnter={() => setOpenDropdown('countries')}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              <button className="nav-link-button">
                 Countries
               </button>
               {openDropdown === 'countries' && (
@@ -71,11 +78,12 @@ function Hero() {
                 </div>
               )}
             </div>
-            <div className="nav-dropdown">
-              <button
-                className="nav-link-button"
-                onClick={() => toggleDropdown('contact')}
-              >
+            <div
+              className="nav-dropdown"
+              onMouseEnter={() => setOpenDropdown('contact')}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              <button className="nav-link-button">
                 Contact
               </button>
               {openDropdown === 'contact' && (
@@ -86,7 +94,7 @@ function Hero() {
             </div>
             <button
               ref={getStartedBtnRef}
-              className="nav-button glass-card"
+              className="nav-button"
               onMouseMove={handleGetStartedMouseMove}
               style={{
                 '--x': `${getStartedBtnPosition.x}px`,
