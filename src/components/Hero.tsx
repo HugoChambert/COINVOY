@@ -1,7 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
 import ContactForm from './ContactForm'
-import LanguageSwitcher from './LanguageSwitcher'
-import ThemeSwitcher from './ThemeSwitcher'
 import { useLanguage } from '../contexts/LanguageContext'
 import './Hero.css'
 
@@ -10,7 +8,7 @@ interface HeroProps {
 }
 
 function Hero({ onNavigateToAuth }: HeroProps) {
-  const { t } = useLanguage()
+  const { t, language, setLanguage } = useLanguage()
   const [showContactForm, setShowContactForm] = useState(false)
   const primaryBtnRef = useRef<HTMLButtonElement>(null)
   const getStartedBtnRef = useRef<HTMLButtonElement>(null)
@@ -24,6 +22,14 @@ function Hero({ onNavigateToAuth }: HeroProps) {
     { name: 'United States', flag: '🇺🇸' },
     { name: 'Thailand', flag: '🇹🇭' },
   ]
+
+  const languages = [
+    { code: 'en' as const, name: 'English', flag: '🇺🇸' },
+    { code: 'fr' as const, name: 'Français', flag: '🇫🇷' },
+    { code: 'th' as const, name: 'ไทย', flag: '🇹🇭' }
+  ]
+
+  const currentLanguage = languages.find(lang => lang.code === language) || languages[0]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -102,13 +108,35 @@ function Hero({ onNavigateToAuth }: HeroProps) {
                     className="dropdown-item"
                     onClick={() => setShowContactForm(true)}
                   >
-                    Contact Us
+                    {t('nav.contactUs')}
                   </button>
                 </div>
               )}
             </div>
-            <ThemeSwitcher />
-            <LanguageSwitcher />
+            <div
+              className="nav-dropdown"
+              onMouseEnter={() => setOpenDropdown('language')}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              <button className="nav-link-button">
+                <span className="dropdown-flag">{currentLanguage.flag}</span>
+                {currentLanguage.code.toUpperCase()}
+              </button>
+              {openDropdown === 'language' && (
+                <div className="dropdown-menu">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      className="dropdown-item"
+                      onClick={() => setLanguage(lang.code)}
+                    >
+                      <span className="dropdown-flag">{lang.flag}</span>
+                      {lang.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <button
               ref={getStartedBtnRef}
               className="nav-button"

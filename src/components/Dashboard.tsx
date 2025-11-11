@@ -4,8 +4,6 @@ import ExchangeRates from './ExchangeRates';
 import WalletConnect from './WalletConnect';
 import BankConnect from './BankConnect';
 import Transfer from './Transfer';
-import LanguageSwitcher from './LanguageSwitcher';
-import ThemeSwitcher from './ThemeSwitcher';
 import { useLanguage } from '../contexts/LanguageContext';
 import './Dashboard.css';
 
@@ -14,8 +12,17 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ onLogout }: DashboardProps) {
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const [user, setUser] = useState<any>(null);
+  const [showLangDropdown, setShowLangDropdown] = useState(false);
+
+  const languages = [
+    { code: 'en' as const, name: 'English', flag: '🇺🇸' },
+    { code: 'fr' as const, name: 'Français', flag: '🇫🇷' },
+    { code: 'th' as const, name: 'ไทย', flag: '🇹🇭' }
+  ];
+
+  const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
 
   useEffect(() => {
     loadUser();
@@ -56,8 +63,30 @@ export default function Dashboard({ onLogout }: DashboardProps) {
         </div>
         <div className="dashboard-user">
           <span className="user-email">{user?.email}</span>
-          <ThemeSwitcher />
-          <LanguageSwitcher />
+          <div
+            className="dashboard-lang-dropdown"
+            onMouseEnter={() => setShowLangDropdown(true)}
+            onMouseLeave={() => setShowLangDropdown(false)}
+          >
+            <button className="lang-btn">
+              <span className="lang-flag">{currentLanguage.flag}</span>
+              <span>{currentLanguage.code.toUpperCase()}</span>
+            </button>
+            {showLangDropdown && (
+              <div className="lang-dropdown-menu">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    className="lang-dropdown-item"
+                    onClick={() => setLanguage(lang.code)}
+                  >
+                    <span className="lang-flag">{lang.flag}</span>
+                    {lang.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <button onClick={handleLogout} className="logout-btn">{t('nav.signOut')}</button>
         </div>
       </header>
