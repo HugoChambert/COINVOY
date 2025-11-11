@@ -6,6 +6,17 @@ function Hero() {
   const getStartedBtnRef = useRef<HTMLButtonElement>(null)
   const [primaryBtnPosition, setPrimaryBtnPosition] = useState({ x: 0, y: 0 })
   const [getStartedBtnPosition, setGetStartedBtnPosition] = useState({ x: 0, y: 0 })
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+
+  const countries = [
+    { name: 'France', flag: '🇫🇷' },
+    { name: 'United States', flag: '🇺🇸' },
+    { name: 'Thailand', flag: '🇹🇭' },
+  ]
+
+  const toggleDropdown = (dropdown: string) => {
+    setOpenDropdown(openDropdown === dropdown ? null : dropdown)
+  }
 
   const handlePrimaryMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!primaryBtnRef.current) return
@@ -29,9 +40,50 @@ function Hero() {
         <div className="nav-container">
           <div className="logo">CoinVoy</div>
           <div className="nav-links">
-            <a href="#features">Features</a>
-            <a href="#countries">Countries</a>
-            <a href="#contact">Contact</a>
+            <div className="nav-dropdown">
+              <button
+                className="nav-link-button"
+                onClick={() => toggleDropdown('features')}
+              >
+                Features
+              </button>
+              {openDropdown === 'features' && (
+                <div className="dropdown-menu">
+                  <div className="dropdown-empty">Coming soon</div>
+                </div>
+              )}
+            </div>
+            <div className="nav-dropdown">
+              <button
+                className="nav-link-button"
+                onClick={() => toggleDropdown('countries')}
+              >
+                Countries
+              </button>
+              {openDropdown === 'countries' && (
+                <div className="dropdown-menu">
+                  {countries.map((country, index) => (
+                    <a key={index} href="#countries" className="dropdown-item">
+                      <span className="dropdown-flag">{country.flag}</span>
+                      {country.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="nav-dropdown">
+              <button
+                className="nav-link-button"
+                onClick={() => toggleDropdown('contact')}
+              >
+                Contact
+              </button>
+              {openDropdown === 'contact' && (
+                <div className="dropdown-menu">
+                  <div className="dropdown-empty">Coming soon</div>
+                </div>
+              )}
+            </div>
             <button
               ref={getStartedBtnRef}
               className="nav-button glass-card"

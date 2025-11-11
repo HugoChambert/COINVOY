@@ -78,6 +78,8 @@
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .country-description {
@@ -88,10 +90,49 @@
 
 @media (max-width: 768px) {
   .countries {
-    padding: 4rem 1.5rem;
+    padding: 3rem 1.5rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+  }
+
+  .countries-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
   }
 
   .countries-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .country-card {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .country-card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+
+  .country-flag {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .country-name {
+    font-size: 1.5rem;
+  }
+
+  .country-currency {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.875rem;
+  }
+
+  .country-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
 }
