@@ -97,7 +97,7 @@ function App() {
 
       draw() {
         if (!ctx) return
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
         ctx.fill()
@@ -123,9 +123,9 @@ function App() {
 
           if (distance < connectionDistance) {
             ctx.strokeStyle = `rgba(255, 255, 255, ${
-              0.2 * (1 - distance / connectionDistance)
+              0.5 * (1 - distance / connectionDistance)
             })`
-            ctx.lineWidth = 0.5
+            ctx.lineWidth = 1
             ctx.beginPath()
             ctx.moveTo(particle.x, particle.y)
             ctx.lineTo(particles[j].x, particles[j].y)
