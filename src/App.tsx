@@ -58,9 +58,9 @@ function App() {
     canvas.height = window.innerHeight
     console.log('Canvas initialized:', canvas.width, 'x', canvas.height)
 
-    ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'
-    ctx.fillRect(50, 50, 100, 100)
-    console.log('Drew test rectangle')
+    ctx.fillStyle = 'red'
+    ctx.fillRect(0, 0, 200, 200)
+    console.log('Drew LARGE test rectangle at 0,0')
 
     const particles: Particle[] = []
     const particleCount = 100
@@ -108,9 +108,9 @@ function App() {
 
       draw() {
         if (!ctx) return
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
+        ctx.fillStyle = 'rgb(255, 255, 255)'
         ctx.beginPath()
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+        ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2)
         ctx.fill()
       }
     }
@@ -134,9 +134,9 @@ function App() {
 
           if (distance < connectionDistance) {
             ctx.strokeStyle = `rgba(255, 255, 255, ${
-              0.5 * (1 - distance / connectionDistance)
+              0.8 * (1 - distance / connectionDistance)
             })`
-            ctx.lineWidth = 1
+            ctx.lineWidth = 2
             ctx.beginPath()
             ctx.moveTo(particle.x, particle.y)
             ctx.lineTo(particles[j].x, particles[j].y)
