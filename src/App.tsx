@@ -43,13 +43,24 @@ function App() {
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!canvas) {
+      console.error('Canvas ref not found')
+      return
+    }
 
     const ctx = canvas.getContext('2d')
-    if (!ctx) return
+    if (!ctx) {
+      console.error('Canvas context not found')
+      return
+    }
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
+    console.log('Canvas initialized:', canvas.width, 'x', canvas.height)
+
+    ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'
+    ctx.fillRect(50, 50, 100, 100)
+    console.log('Drew test rectangle')
 
     const particles: Particle[] = []
     const particleCount = 100
@@ -159,27 +170,42 @@ function App() {
 
   if (loading) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
-      }}>
-        <div style={{ color: 'white' }}>Loading...</div>
-      </div>
+      <>
+        <canvas ref={canvasRef} className="background-canvas" />
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          <div style={{ color: 'white' }}>Loading...</div>
+        </div>
+      </>
     )
   }
 
   if (currentPage === 'dashboard' && isAuthenticated) {
-    return <Dashboard onLogout={() => {
-      setIsAuthenticated(false)
-      setCurrentPage('home')
-    }} />
+    return (
+      <>
+        <canvas ref={canvasRef} className="background-canvas" />
+        <Dashboard onLogout={() => {
+          setIsAuthenticated(false)
+          setCurrentPage('home')
+        }} />
+      </>
+    )
   }
 
   if (currentPage === 'auth') {
-    return <Auth />
+    return (
+      <>
+        <canvas ref={canvasRef} className="background-canvas" />
+        <Auth />
+      </>
+    )
   }
 
   return (
