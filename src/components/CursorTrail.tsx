@@ -4,9 +4,7 @@ import './CursorTrail.css'
 interface Point {
   x: number
   y: number
-  vx: number
-  vy: number
-  life: number
+  alpha: number
 }
 
 export default function CursorTrail() {
@@ -23,31 +21,10 @@ export default function CursorTrail() {
     canvas.height = window.innerHeight
 
     const points: Point[] = []
-    const maxPoints = 30
-    const mouse = { x: 0, y: 0 }
+    const maxPoints = 50
 
     const addPoint = (x: number, y: number) => {
-      if (points.length > 0) {
-        const lastPoint = points[points.length - 1]
-        const dx = x - lastPoint.x
-        const dy = y - lastPoint.y
-
-        points.push({
-          x,
-          y,
-          vx: dx * 0.3,
-          vy: dy * 0.3,
-          life: 1
-        })
-      } else {
-        points.push({
-          x,
-          y,
-          vx: 0,
-          vy: 0,
-          life: 1
-        })
-      }
+      points.push({ x, y, alpha: 1 })
 
       if (points.length > maxPoints) {
         points.shift()
@@ -58,96 +35,63 @@ export default function CursorTrail() {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       for (let i = 0; i < points.length; i++) {
-        const point = points[i]
-        point.life -= 0.02
+        points[i].alpha -= 0.015
+      }
 
-        if (i > 0) {
-          const prevPoint = points[i - 1]
-          const dx = prevPoint.x - point.x
-          const dy = prevPoint.y - point.y
-
-          point.vx += dx * 0.15
-          point.vy += dy * 0.15
-
-          point.vx *= 0.85
-          point.vy *= 0.85
-
-          point.x += point.vx
-          point.y += point.vy
+      for (let i = points.length - 1; i >= 0; i--) {
+        if (points[i].alpha <= 0) {
+          points.splice(i, 1)
         }
       }
 
-      points.forEach((point, index) => {
-        if (point.life <= 0) return
+      if (points.length < 2) {
+        requestAnimationFrame(animate)
+        return
+      }
 
-        const nextPoint = points[index + 1]
-        if (!nextPoint) return
+      for (let i = 0; i < points.length - 1; i++) {
+        const point = points[i]
+        const nextPoint = points[i + 1]
 
-        const progress = index / points.length
-        const size = 20 * (1 - progress) * point.life
+        const progress = i / (points.length - 1)
+        const lineWidth = 12 * (1 - progress) * point.alpha
 
-        const gradient = ctx.createRadialGradient(
-          point.x, point.y, 0,
-          point.x, point.y, size
-        )
+        ctx.save()
+        ctx.globalCompositeOperation = 'screen'
 
-        const alpha = point.life * (1 - progress)
-        gradient.addColorStop(0, `rgba(30, 215, 96, ${alpha * 0.8})`)
-        gradient.addColorStop(0.5, `rgba(30, 215, 96, ${alpha * 0.4})`)
-        gradient.addColorStop(1, `rgba(30, 215, 96, 0)`)
+        ctx.shadowBlur = 30
+        ctx.shadowColor = 'rgba(30, 215, 96, 1)'
 
-        ctx.fillStyle = gradient
-        ctx.beginPath()
-        ctx.arc(point.x, point.y, size, 0, Math.PI * 2)
-        ctx.fill()
+        ctx.strokeStyle = `rgba(30, 215, 96, ${point.alpha * 0.9})`
+        ctx.lineWidth = lineWidth
+        ctx.lineCap = 'round'
+        ctx.lineJoin = 'round'
 
-        ctx.strokeStyle = `rgba(30, 215, 96, ${alpha * 0.6})`
-        ctx.lineWidth = 3
         ctx.beginPath()
         ctx.moveTo(point.x, point.y)
         ctx.lineTo(nextPoint.x, nextPoint.y)
         ctx.stroke()
-      })
 
-      points.forEach((point, index) => {
-        if (point.life <= 0) return
-
-        const progress = index / points.length
-        const glowSize = 30 * (1 - progress) * point.life
-
-        ctx.shadowBlur = 20
+        ctx.shadowBlur = 50
         ctx.shadowColor = 'rgba(30, 215, 96, 0.8)'
+        ctx.strokeStyle = `rgba(30, 215, 96, ${point.alpha * 0.5})`
+        ctx.lineWidth = lineWidth * 2
+        ctx.stroke()
 
-        const glowGradient = ctx.createRadialGradient(
-          point.x, point.y, 0,
-          point.x, point.y, glowSize
-        )
+        ctx.shadowBlur = 80
+        ctx.shadowColor = 'rgba(30, 215, 96, 0.4)'
+        ctx.strokeStyle = `rgba(30, 215, 96, ${point.alpha * 0.2})`
+        ctx.lineWidth = lineWidth * 3
+        ctx.stroke()
 
-        const alpha = point.life * (1 - progress) * 0.3
-        glowGradient.addColorStop(0, `rgba(30, 215, 96, ${alpha})`)
-        glowGradient.addColorStop(1, `rgba(30, 215, 96, 0)`)
-
-        ctx.fillStyle = glowGradient
-        ctx.beginPath()
-        ctx.arc(point.x, point.y, glowSize, 0, Math.PI * 2)
-        ctx.fill()
-
-        ctx.shadowBlur = 0
-      })
-
-      for (let i = points.length - 1; i >= 0; i--) {
-        if (points[i].life <= 0) {
-          points.splice(i, 1)
-        }
+        ctx.restore()
       }
 
       requestAnimationFrame(animate)
     }
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.x = e.clientX
-      mouse.y = e.clientY
-      addPoint(mouse.x, mouse.y)
+      addPoint(e.clientX, e.clientY)
     }
 
     const handleResize = () => {
