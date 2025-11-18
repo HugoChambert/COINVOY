@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
 import './WalletConnect.css';
 
 interface Wallet {
@@ -14,6 +15,7 @@ interface WalletConnectProps {
 }
 
 export default function WalletConnect({ userId }: WalletConnectProps) {
+  const { t } = useLanguage();
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [showAddWallet, setShowAddWallet] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
@@ -65,19 +67,19 @@ export default function WalletConnect({ userId }: WalletConnectProps) {
   return (
     <div className="wallet-connect">
       <div className="wallet-header">
-        <h3>Crypto Wallets</h3>
+        <h3>{t('wallet.title')}</h3>
         <button
           onClick={() => setShowAddWallet(!showAddWallet)}
           className="add-wallet-btn"
         >
-          {showAddWallet ? 'Cancel' : '+ Add Wallet'}
+          {showAddWallet ? t('wallet.cancel') : t('wallet.addWallet')}
         </button>
       </div>
 
       {showAddWallet && (
         <form onSubmit={handleAddWallet} className="add-wallet-form">
           <div className="form-group">
-            <label>Wallet Type</label>
+            <label>{t('wallet.type')}</label>
             <select
               value={walletType}
               onChange={(e) => setWalletType(e.target.value)}
@@ -92,7 +94,7 @@ export default function WalletConnect({ userId }: WalletConnectProps) {
           </div>
 
           <div className="form-group">
-            <label>Wallet Address</label>
+            <label>{t('wallet.address')}</label>
             <input
               type="text"
               value={walletAddress}
@@ -104,7 +106,7 @@ export default function WalletConnect({ userId }: WalletConnectProps) {
           </div>
 
           <button type="submit" disabled={loading} className="submit-btn">
-            {loading ? 'Adding...' : 'Connect Wallet'}
+            {loading ? t('wallet.adding') : t('wallet.connect')}
           </button>
         </form>
       )}
@@ -112,7 +114,7 @@ export default function WalletConnect({ userId }: WalletConnectProps) {
       <div className="wallets-list">
         {wallets.length === 0 ? (
           <div className="empty-state">
-            <p>No wallets connected</p>
+            <p>{t('wallet.noWallets')}</p>
           </div>
         ) : (
           wallets.map((wallet) => (
@@ -132,7 +134,7 @@ export default function WalletConnect({ userId }: WalletConnectProps) {
                 onClick={() => handleRemoveWallet(wallet.id)}
                 className="remove-btn"
               >
-                Remove
+                {t('common.remove')}
               </button>
             </div>
           ))

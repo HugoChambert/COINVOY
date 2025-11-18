@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
 import './BankConnect.css';
 
 interface BankAccount {
@@ -15,6 +16,7 @@ interface BankConnectProps {
 }
 
 export default function BankConnect({ userId }: BankConnectProps) {
+  const { t } = useLanguage();
   const [accounts, setAccounts] = useState<BankAccount[]>([]);
   const [showAddAccount, setShowAddAccount] = useState(false);
   const [bankName, setBankName] = useState('');
@@ -71,57 +73,57 @@ export default function BankConnect({ userId }: BankConnectProps) {
   return (
     <div className="bank-connect">
       <div className="bank-header">
-        <h3>Bank Accounts</h3>
+        <h3>{t('bank.title')}</h3>
         <button
           onClick={() => setShowAddAccount(!showAddAccount)}
           className="add-bank-btn"
         >
-          {showAddAccount ? 'Cancel' : '+ Add Bank'}
+          {showAddAccount ? t('wallet.cancel') : t('bank.addBank')}
         </button>
       </div>
 
       {showAddAccount && (
         <form onSubmit={handleAddAccount} className="add-bank-form">
           <div className="form-group">
-            <label>Bank Name</label>
+            <label>{t('bank.name')}</label>
             <input
               type="text"
               value={bankName}
               onChange={(e) => setBankName(e.target.value)}
-              placeholder="e.g., Chase, Bank of America"
+              placeholder={t('bank.namePlaceholder')}
               className="form-input"
               required
             />
           </div>
 
           <div className="form-group">
-            <label>Account Type</label>
+            <label>{t('bank.accountType')}</label>
             <select
               value={accountType}
               onChange={(e) => setAccountType(e.target.value)}
               className="form-select"
             >
-              <option value="checking">Checking</option>
-              <option value="savings">Savings</option>
+              <option value="checking">{t('bank.checking')}</option>
+              <option value="savings">{t('bank.savings')}</option>
             </select>
           </div>
 
           <div className="form-group">
-            <label>Account Number</label>
+            <label>{t('bank.accountNumber')}</label>
             <input
               type="password"
               value={accountNumber}
               onChange={(e) => setAccountNumber(e.target.value)}
-              placeholder="Enter account number"
+              placeholder={t('bank.accountPlaceholder')}
               className="form-input"
               required
               minLength={8}
             />
-            <span className="form-hint">Only last 4 digits will be stored</span>
+            <span className="form-hint">{t('bank.securityNote')}</span>
           </div>
 
           <button type="submit" disabled={loading} className="submit-btn">
-            {loading ? 'Adding...' : 'Connect Bank Account'}
+            {loading ? t('bank.adding') : t('bank.connect')}
           </button>
         </form>
       )}
@@ -129,7 +131,7 @@ export default function BankConnect({ userId }: BankConnectProps) {
       <div className="accounts-list">
         {accounts.length === 0 ? (
           <div className="empty-state">
-            <p>No bank accounts connected</p>
+            <p>{t('bank.noAccounts')}</p>
           </div>
         ) : (
           accounts.map((account) => (
@@ -149,7 +151,7 @@ export default function BankConnect({ userId }: BankConnectProps) {
                 onClick={() => handleRemoveAccount(account.id)}
                 className="remove-btn"
               >
-                Remove
+                {t('common.remove')}
               </button>
             </div>
           ))

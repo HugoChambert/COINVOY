@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
 import './Transfer.css';
 
 interface Wallet {
@@ -16,6 +17,7 @@ interface BankAccount {
 }
 
 export default function Transfer() {
+  const { t } = useLanguage();
   const [transferType, setTransferType] = useState<'crypto' | 'fiat'>('crypto');
   const [fromAccount, setFromAccount] = useState('');
   const [toAddress, setToAddress] = useState('');
@@ -69,26 +71,26 @@ export default function Transfer() {
           className={`tab ${transferType === 'crypto' ? 'active' : ''}`}
           onClick={() => setTransferType('crypto')}
         >
-          Crypto Transfer
+          {t('transfer.cryptoTransfer')}
         </button>
         <button
           className={`tab ${transferType === 'fiat' ? 'active' : ''}`}
           onClick={() => setTransferType('fiat')}
         >
-          Bank Transfer
+          {t('transfer.bankTransfer')}
         </button>
       </div>
 
       <form onSubmit={handleTransfer} className="transfer-form">
         <div className="form-group">
-          <label>From</label>
+          <label>{t('transfer.from')}</label>
           <select
             value={fromAccount}
             onChange={(e) => setFromAccount(e.target.value)}
             className="form-select"
             required
           >
-            <option value="">Select source</option>
+            <option value="">{t('transfer.selectSource')}</option>
             {transferType === 'crypto' ? (
               wallets.map((wallet) => (
                 <option key={wallet.id} value={wallet.id}>
@@ -106,12 +108,12 @@ export default function Transfer() {
         </div>
 
         <div className="form-group">
-          <label>{transferType === 'crypto' ? 'To Wallet Address' : 'To Account'}</label>
+          <label>{transferType === 'crypto' ? t('transfer.to') : t('transfer.toAccount')}</label>
           <input
             type="text"
             value={toAddress}
             onChange={(e) => setToAddress(e.target.value)}
-            placeholder={transferType === 'crypto' ? '0x...' : 'Account number or email'}
+            placeholder={transferType === 'crypto' ? '0x...' : t('transfer.toPlaceholder')}
             className="form-input"
             required
           />
@@ -119,7 +121,7 @@ export default function Transfer() {
 
         <div className="form-row">
           <div className="form-group">
-            <label>Amount</label>
+            <label>{t('transfer.amount')}</label>
             <input
               type="number"
               value={amount}
@@ -133,7 +135,7 @@ export default function Transfer() {
           </div>
 
           <div className="form-group">
-            <label>Currency</label>
+            <label>{t('transfer.currency')}</label>
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
@@ -155,22 +157,22 @@ export default function Transfer() {
 
         {success && (
           <div className="success-message">
-            Transfer initiated successfully!
+            {t('transfer.success')}
           </div>
         )}
 
         <button type="submit" disabled={loading} className="transfer-btn">
-          {loading ? 'Processing...' : 'Send Transfer'}
+          {loading ? t('transfer.processing') : t('transfer.send')}
         </button>
       </form>
 
       <div className="transfer-info">
         <div className="info-item">
-          <span className="info-label">Network Fee:</span>
+          <span className="info-label">{t('transfer.networkFee')}</span>
           <span className="info-value">{transferType === 'crypto' ? '~$2.50' : '$0.00'}</span>
         </div>
         <div className="info-item">
-          <span className="info-label">Estimated Time:</span>
+          <span className="info-label">{t('transfer.estimatedTime')}</span>
           <span className="info-value">{transferType === 'crypto' ? '10-30 min' : '1-3 days'}</span>
         </div>
       </div>
