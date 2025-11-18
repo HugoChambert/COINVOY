@@ -51,9 +51,9 @@ function App() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const dotSpacing = 30
-    const dotRadius = 2
-    const maxDistance = 100
+    const dotSpacing = 40
+    const dotRadius = 3
+    const maxDistance = 150
     const mouse = { x: -1000, y: -1000 }
 
     interface Dot {
@@ -99,17 +99,17 @@ function App() {
         )
         const intensity = Math.min(distanceFromBase / 15, 1)
 
-        ctx.fillStyle = `rgba(30, 215, 96, ${0.3 + intensity * 0.7})`
+        ctx.fillStyle = `rgba(30, 215, 96, ${0.5 + intensity * 0.5})`
         ctx.beginPath()
-        ctx.arc(dot.x, dot.y, dotRadius + intensity * 2, 0, Math.PI * 2)
+        ctx.arc(dot.x, dot.y, dotRadius + intensity * 3, 0, Math.PI * 2)
         ctx.fill()
 
-        if (intensity > 0.2) {
-          ctx.shadowBlur = 10
-          ctx.shadowColor = 'rgba(30, 215, 96, 0.8)'
-          ctx.fillStyle = `rgba(30, 215, 96, ${intensity * 0.5})`
+        if (intensity > 0.1) {
+          ctx.shadowBlur = 15
+          ctx.shadowColor = 'rgba(30, 215, 96, 1)'
+          ctx.fillStyle = `rgba(30, 215, 96, ${intensity * 0.6})`
           ctx.beginPath()
-          ctx.arc(dot.x, dot.y, dotRadius + intensity * 4, 0, Math.PI * 2)
+          ctx.arc(dot.x, dot.y, dotRadius + intensity * 6, 0, Math.PI * 2)
           ctx.fill()
           ctx.shadowBlur = 0
         }
