@@ -21,9 +21,19 @@ export default function CursorTrail() {
     canvas.height = window.innerHeight
 
     const points: Point[] = []
-    const maxPoints = 50
+    const maxPoints = 40
+    const minDistance = 3
 
     const addPoint = (x: number, y: number) => {
+      if (points.length > 0) {
+        const lastPoint = points[points.length - 1]
+        const distance = Math.sqrt(
+          Math.pow(x - lastPoint.x, 2) + Math.pow(y - lastPoint.y, 2)
+        )
+
+        if (distance < minDistance) return
+      }
+
       points.push({ x, y, alpha: 1 })
 
       if (points.length > maxPoints) {
@@ -31,11 +41,58 @@ export default function CursorTrail() {
       }
     }
 
+    const drawSmoothCurve = (points: Point[]) => {
+      if (points.length < 2) return
+
+      ctx.save()
+      ctx.globalCompositeOperation = 'screen'
+
+      for (let layer = 0; layer < 3; layer++) {
+        const blur = layer === 0 ? 25 : layer === 1 ? 40 : 60
+        const widthMultiplier = layer === 0 ? 1 : layer === 1 ? 1.8 : 2.8
+        const alphaMultiplier = layer === 0 ? 0.9 : layer === 1 ? 0.5 : 0.25
+
+        ctx.shadowBlur = blur
+        ctx.shadowColor = 'rgba(30, 215, 96, 1)'
+
+        ctx.beginPath()
+
+        for (let i = 0; i < points.length - 1; i++) {
+          const point = points[i]
+          const nextPoint = points[i + 1]
+
+          const progress = i / (points.length - 1)
+          const lineWidth = 10 * (1 - progress * 0.5) * point.alpha * widthMultiplier
+
+          ctx.strokeStyle = `rgba(30, 215, 96, ${point.alpha * alphaMultiplier})`
+          ctx.lineWidth = lineWidth
+          ctx.lineCap = 'round'
+          ctx.lineJoin = 'round'
+
+          if (i === 0) {
+            ctx.moveTo(point.x, point.y)
+          }
+
+          if (i < points.length - 2) {
+            const midX = (nextPoint.x + points[i + 1].x) / 2
+            const midY = (nextPoint.y + points[i + 1].y) / 2
+            ctx.quadraticCurveTo(nextPoint.x, nextPoint.y, midX, midY)
+          } else {
+            ctx.lineTo(nextPoint.x, nextPoint.y)
+          }
+        }
+
+        ctx.stroke()
+      }
+
+      ctx.restore()
+    }
+
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       for (let i = 0; i < points.length; i++) {
-        points[i].alpha -= 0.015
+        points[i].alpha -= 0.012
       }
 
       for (let i = points.length - 1; i >= 0; i--) {
@@ -44,48 +101,7 @@ export default function CursorTrail() {
         }
       }
 
-      if (points.length < 2) {
-        requestAnimationFrame(animate)
-        return
-      }
-
-      for (let i = 0; i < points.length - 1; i++) {
-        const point = points[i]
-        const nextPoint = points[i + 1]
-
-        const progress = i / (points.length - 1)
-        const lineWidth = 12 * (1 - progress) * point.alpha
-
-        ctx.save()
-        ctx.globalCompositeOperation = 'screen'
-
-        ctx.shadowBlur = 30
-        ctx.shadowColor = 'rgba(30, 215, 96, 1)'
-
-        ctx.strokeStyle = `rgba(30, 215, 96, ${point.alpha * 0.9})`
-        ctx.lineWidth = lineWidth
-        ctx.lineCap = 'round'
-        ctx.lineJoin = 'round'
-
-        ctx.beginPath()
-        ctx.moveTo(point.x, point.y)
-        ctx.lineTo(nextPoint.x, nextPoint.y)
-        ctx.stroke()
-
-        ctx.shadowBlur = 50
-        ctx.shadowColor = 'rgba(30, 215, 96, 0.8)'
-        ctx.strokeStyle = `rgba(30, 215, 96, ${point.alpha * 0.5})`
-        ctx.lineWidth = lineWidth * 2
-        ctx.stroke()
-
-        ctx.shadowBlur = 80
-        ctx.shadowColor = 'rgba(30, 215, 96, 0.4)'
-        ctx.strokeStyle = `rgba(30, 215, 96, ${point.alpha * 0.2})`
-        ctx.lineWidth = lineWidth * 3
-        ctx.stroke()
-
-        ctx.restore()
-      }
+      drawSmoothCurve(points)
 
       requestAnimationFrame(animate)
     }
@@ -102,7 +118,7 @@ export default function CursorTrail() {
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('resize', handleResize)
 
-    animate()
+    requestAnimationFrame(animate)
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
