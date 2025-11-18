@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { useLanguage } from '../contexts/LanguageContext'
 import './CallToAction.css'
 
 interface CallToActionProps {
@@ -6,6 +7,7 @@ interface CallToActionProps {
 }
 
 function CallToAction({ onNavigateToAuth }: CallToActionProps) {
+  const { t } = useLanguage()
   const btnRef = useRef<HTMLButtonElement>(null)
   const [btnPosition, setBtnPosition] = useState({ x: 0, y: 0 })
 
@@ -20,10 +22,9 @@ function CallToAction({ onNavigateToAuth }: CallToActionProps) {
   return (
     <section id="contact" className="cta">
       <div className="cta-container glass-card">
-        <h2 className="cta-title">Ready to Start Transferring?</h2>
+        <h2 className="cta-title">{t('cta.title')}</h2>
         <p className="cta-description">
-          Join thousands of users who trust CoinVoy for their international money transfers.
-          Get started today and experience the future of cross-border payments.
+          {t('cta.description')}
         </p>
         <button
           ref={btnRef}
@@ -35,19 +36,19 @@ function CallToAction({ onNavigateToAuth }: CallToActionProps) {
             '--y': `${btnPosition.y}px`,
           } as React.CSSProperties}
         >
-          Get Started Now
+          {t('cta.button')}
         </button>
       </div>
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">CoinVoy</div>
           <div className="footer-links">
-            <a href="#privacy">Privacy Policy</a>
-            <a href="#terms">Terms of Service</a>
-            <a href="#support">Support</a>
+            <a href="#privacy">{t('footer.privacy')}</a>
+            <a href="#terms">{t('footer.terms')}</a>
+            <a href="#support">{t('footer.support')}</a>
           </div>
           <p className="footer-copyright">
-            © 2025 CoinVoy. All rights reserved.
+            {t('footer.copyright')}
           </p>
         </div>
       </footer>

@@ -1,25 +1,28 @@
 import { useRef, useState } from 'react'
+import { useLanguage } from '../contexts/LanguageContext'
 import './Countries.css'
 
 function Countries() {
+  const { t } = useLanguage()
+
   const countries = [
     {
       name: 'France',
       flag: '🇫🇷',
       currency: 'EUR',
-      description: 'Fast transfers to all major French banks',
+      description: t('countries.france.description'),
     },
     {
       name: 'United States',
       flag: '🇺🇸',
       currency: 'USD',
-      description: 'Instant deposits across the United States',
+      description: t('countries.usa.description'),
     },
     {
       name: 'Thailand',
       flag: '🇹🇭',
       currency: 'THB',
-      description: 'Quick and reliable transfers throughout Thailand',
+      description: t('countries.thailand.description'),
     },
   ]
 
@@ -46,9 +49,9 @@ function Countries() {
   return (
     <section id="countries" className="countries">
       <div className="countries-container">
-        <h2 className="section-title">Supported Countries</h2>
+        <h2 className="section-title">{t('countries.title')}</h2>
         <p className="countries-subtitle">
-          Send money to these countries with ease
+          {t('countries.subtitle')}
         </p>
         <div className="countries-grid">
           {countries.map((country, index) => (

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLanguage } from '../contexts/LanguageContext'
 import './ContactForm.css'
 
 interface ContactFormProps {
@@ -6,6 +7,7 @@ interface ContactFormProps {
 }
 
 function ContactForm({ onClose }: ContactFormProps) {
+  const { t } = useLanguage()
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [notes, setNotes] = useState('')
@@ -47,56 +49,56 @@ function ContactForm({ onClose }: ContactFormProps) {
     <div className="contact-modal-overlay" onClick={onClose}>
       <div className="contact-modal glass-card" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>×</button>
-        <h2 className="modal-title">Contact Us</h2>
-        <p className="modal-description">Fill out the form below and we'll get back to you soon.</p>
+        <h2 className="modal-title">{t('contact.title')}</h2>
+        <p className="modal-description">{t('contact.description')}</p>
 
         <form onSubmit={handleSubmit} className="contact-form">
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{t('contact.email')}</label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="your@email.com"
+              placeholder={t('contact.emailPlaceholder')}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="phone">Phone Number</label>
+            <label htmlFor="phone">{t('contact.phone')}</label>
             <input
               type="tel"
               id="phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
-              placeholder="+1 (555) 000-0000"
+              placeholder={t('contact.phonePlaceholder')}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="notes">Notes</label>
+            <label htmlFor="notes">{t('contact.notes')}</label>
             <textarea
               id="notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               required
-              placeholder="Tell us how we can help you..."
+              placeholder={t('contact.notesPlaceholder')}
               rows={5}
             />
           </div>
 
           {submitStatus === 'success' && (
-            <div className="submit-message success">Thank you! We'll be in touch soon.</div>
+            <div className="submit-message success">{t('contact.success')}</div>
           )}
 
           {submitStatus === 'error' && (
-            <div className="submit-message error">Something went wrong. Please try again.</div>
+            <div className="submit-message error">{t('contact.error')}</div>
           )}
 
           <button type="submit" className="submit-button" disabled={isSubmitting}>
-            {isSubmitting ? 'Sending...' : 'Send Message'}
+            {isSubmitting ? t('contact.sending') : t('contact.sendMessage')}
           </button>
         </form>
       </div>

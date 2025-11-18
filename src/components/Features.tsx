@@ -1,23 +1,26 @@
 import { useRef, useState } from 'react'
+import { useLanguage } from '../contexts/LanguageContext'
 import './Features.css'
 
 function Features() {
+  const { t } = useLanguage()
+
   const features = [
     {
-      title: 'Lightning Fast',
-      description: 'Complete transfers in minutes, not days. Cryptocurrency enables instant cross-border transactions.',
+      title: t('features.fast.title'),
+      description: t('features.fast.description'),
     },
     {
-      title: 'Low Fees',
-      description: 'Save on traditional banking fees. Our crypto-powered system keeps costs minimal.',
+      title: t('features.lowFees.title'),
+      description: t('features.lowFees.description'),
     },
     {
-      title: 'Secure & Transparent',
-      description: 'Track your transfer in real-time. Blockchain technology ensures security and transparency.',
+      title: t('features.secure.title'),
+      description: t('features.secure.description'),
     },
     {
-      title: 'Simple Process',
-      description: 'Easy to use interface. Send money in three simple steps without technical knowledge.',
+      title: t('features.simple.title'),
+      description: t('features.simple.description'),
     },
   ]
 
@@ -44,7 +47,7 @@ function Features() {
   return (
     <section id="features" className="features">
       <div className="features-container">
-        <h2 className="section-title">Why Choose CoinVoy</h2>
+        <h2 className="section-title">{t('features.title')}</h2>
         <div className="features-grid">
           {features.map((feature, index) => (
             <div

@@ -71,7 +71,7 @@ function Hero({ onNavigateToAuth }: HeroProps) {
               </button>
               {openDropdown === 'features' && (
                 <div className="dropdown-menu">
-                  <div className="dropdown-empty">Coming soon</div>
+                  <div className="dropdown-empty">{t('nav.comingSoon')}</div>
                 </div>
               )}
             </div>
