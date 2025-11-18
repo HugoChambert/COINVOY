@@ -6,7 +6,6 @@ import Countries from './components/Countries'
 import CallToAction from './components/CallToAction'
 import Auth from './components/Auth'
 import Dashboard from './components/Dashboard'
-import CursorTrail from './components/CursorTrail'
 import { supabase } from './lib/supabase'
 
 function App() {
@@ -173,7 +172,6 @@ function App() {
     return (
       <>
         <canvas ref={canvasRef} className="background-canvas" />
-        <CursorTrail />
         <div style={{
           display: 'flex',
           justifyContent: 'center',
@@ -193,7 +191,6 @@ function App() {
     return (
       <>
         <canvas ref={canvasRef} className="background-canvas" />
-        <CursorTrail />
         <Dashboard onLogout={() => {
           setIsAuthenticated(false)
           setCurrentPage('home')
@@ -206,7 +203,6 @@ function App() {
     return (
       <>
         <canvas ref={canvasRef} className="background-canvas" />
-        <CursorTrail />
         <Auth />
       </>
     )
@@ -215,7 +211,6 @@ function App() {
   return (
     <div className="app">
       <canvas ref={canvasRef} className="background-canvas" />
-      <CursorTrail />
       <div className="content">
         <Hero onNavigateToAuth={() => setCurrentPage('auth')} />
         <Features />
