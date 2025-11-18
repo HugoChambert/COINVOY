@@ -43,105 +43,75 @@ function App() {
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) {
-      console.error('Canvas ref not found')
-      return
-    }
+    if (!canvas) return
 
     const ctx = canvas.getContext('2d')
-    if (!ctx) {
-      console.error('Canvas context not found')
-      return
-    }
+    if (!ctx) return
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
-    console.log('Canvas initialized:', canvas.width, 'x', canvas.height)
 
-    ctx.fillStyle = 'red'
-    ctx.fillRect(0, 0, 200, 200)
-    console.log('Drew LARGE test rectangle at 0,0')
+    const dotSpacing = 30
+    const dotRadius = 2
+    const maxDistance = 100
+    const mouse = { x: -1000, y: -1000 }
 
-    const particles: Particle[] = []
-    const particleCount = 100
-    const mouse = { x: 0, y: 0 }
-    const connectionDistance = 150
-
-    const canvasWidth = canvas.width
-    const canvasHeight = canvas.height
-
-    class Particle {
+    interface Dot {
       x: number
       y: number
-      vx: number
-      vy: number
-      size: number
-
-      constructor() {
-        this.x = Math.random() * canvasWidth
-        this.y = Math.random() * canvasHeight
-        this.vx = (Math.random() - 0.5) * 0.5
-        this.vy = (Math.random() - 0.5) * 0.5
-        this.size = Math.random() * 2 + 1
-      }
-
-      update() {
-        this.x += this.vx
-        this.y += this.vy
-
-        const dx = mouse.x - this.x
-        const dy = mouse.y - this.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-
-        if (distance < 200) {
-          const force = (200 - distance) / 200
-          this.vx += dx * force * 0.001
-          this.vy += dy * force * 0.001
-        }
-
-        if (this.x < 0 || this.x > canvasWidth) this.vx *= -1
-        if (this.y < 0 || this.y > canvasHeight) this.vy *= -1
-
-        this.vx *= 0.99
-        this.vy *= 0.99
-      }
-
-      draw() {
-        if (!ctx) return
-        ctx.fillStyle = 'rgb(255, 255, 255)'
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2)
-        ctx.fill()
-      }
+      baseX: number
+      baseY: number
     }
 
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle())
+    const dots: Dot[] = []
+
+    for (let x = 0; x < canvas.width; x += dotSpacing) {
+      for (let y = 0; y < canvas.height; y += dotSpacing) {
+        dots.push({
+          x,
+          y,
+          baseX: x,
+          baseY: y
+        })
+      }
     }
 
     function animate() {
       if (!ctx || !canvas) return
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      particles.forEach((particle, i) => {
-        particle.update()
-        particle.draw()
+      dots.forEach(dot => {
+        const dx = mouse.x - dot.baseX
+        const dy = mouse.y - dot.baseY
+        const distance = Math.sqrt(dx * dx + dy * dy)
 
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particle.x - particles[j].x
-          const dy = particle.y - particles[j].y
-          const distance = Math.sqrt(dx * dx + dy * dy)
+        if (distance < maxDistance) {
+          const force = (1 - distance / maxDistance) * 15
+          dot.x = dot.baseX + (dx / distance) * force
+          dot.y = dot.baseY + (dy / distance) * force
+        } else {
+          dot.x += (dot.baseX - dot.x) * 0.1
+          dot.y += (dot.baseY - dot.y) * 0.1
+        }
 
-          if (distance < connectionDistance) {
-            ctx.strokeStyle = `rgba(255, 255, 255, ${
-              0.8 * (1 - distance / connectionDistance)
-            })`
-            ctx.lineWidth = 2
-            ctx.beginPath()
-            ctx.moveTo(particle.x, particle.y)
-            ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.stroke()
-          }
+        const distanceFromBase = Math.sqrt(
+          Math.pow(dot.x - dot.baseX, 2) + Math.pow(dot.y - dot.baseY, 2)
+        )
+        const intensity = Math.min(distanceFromBase / 15, 1)
+
+        ctx.fillStyle = `rgba(30, 215, 96, ${0.3 + intensity * 0.7})`
+        ctx.beginPath()
+        ctx.arc(dot.x, dot.y, dotRadius + intensity * 2, 0, Math.PI * 2)
+        ctx.fill()
+
+        if (intensity > 0.2) {
+          ctx.shadowBlur = 10
+          ctx.shadowColor = 'rgba(30, 215, 96, 0.8)'
+          ctx.fillStyle = `rgba(30, 215, 96, ${intensity * 0.5})`
+          ctx.beginPath()
+          ctx.arc(dot.x, dot.y, dotRadius + intensity * 4, 0, Math.PI * 2)
+          ctx.fill()
+          ctx.shadowBlur = 0
         }
       })
 
@@ -156,6 +126,17 @@ function App() {
     const handleResize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
+      dots.length = 0
+      for (let x = 0; x < canvas.width; x += dotSpacing) {
+        for (let y = 0; y < canvas.height; y += dotSpacing) {
+          dots.push({
+            x,
+            y,
+            baseX: x,
+            baseY: y
+          })
+        }
+      }
     }
 
     window.addEventListener('mousemove', handleMouseMove)
