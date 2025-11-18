@@ -99,19 +99,19 @@ function App() {
         )
         const intensity = Math.min(distanceFromBase / 15, 1)
 
-        ctx.fillStyle = `rgba(30, 215, 96, ${0.5 + intensity * 0.5})`
-        ctx.beginPath()
-        ctx.arc(dot.x, dot.y, dotRadius + intensity * 3, 0, Math.PI * 2)
-        ctx.fill()
-
-        if (intensity > 0.1) {
+        if (distance < maxDistance) {
           ctx.shadowBlur = 15
           ctx.shadowColor = 'rgba(30, 215, 96, 1)'
-          ctx.fillStyle = `rgba(30, 215, 96, ${intensity * 0.6})`
+          ctx.fillStyle = `rgba(30, 215, 96, ${0.8 + intensity * 0.2})`
           ctx.beginPath()
-          ctx.arc(dot.x, dot.y, dotRadius + intensity * 6, 0, Math.PI * 2)
+          ctx.arc(dot.x, dot.y, dotRadius + intensity * 5, 0, Math.PI * 2)
           ctx.fill()
           ctx.shadowBlur = 0
+        } else {
+          ctx.fillStyle = 'rgba(30, 215, 96, 0.6)'
+          ctx.beginPath()
+          ctx.arc(dot.x, dot.y, dotRadius, 0, Math.PI * 2)
+          ctx.fill()
         }
       })
 
