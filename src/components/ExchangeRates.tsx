@@ -6,6 +6,7 @@ interface ExchangeRate {
   name: string;
   rate: number;
   change: number;
+  history: number[];
 }
 
 export default function ExchangeRates() {
@@ -19,6 +20,21 @@ export default function ExchangeRates() {
     return () => clearInterval(interval);
   }, []);
 
+  const generateHistory = (baseRate: number, change: number) => {
+    const points = 20;
+    const history: number[] = [];
+    const volatility = Math.abs(change) / 100;
+
+    for (let i = 0; i < points; i++) {
+      const progress = i / points;
+      const trend = baseRate * (1 - change / 100 * (1 - progress));
+      const noise = (Math.random() - 0.5) * baseRate * volatility * 0.5;
+      history.push(trend + noise);
+    }
+
+    return history;
+  };
+
   const fetchRates = async () => {
     try {
       const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
@@ -30,10 +46,14 @@ export default function ExchangeRates() {
         { code: 'THB', name: 'Thai Baht', rate: data.rates.THB }
       ];
 
-      const ratesWithChange = currencies.map(currency => ({
-        ...currency,
-        change: (Math.random() - 0.5) * 2
-      }));
+      const ratesWithChange = currencies.map(currency => {
+        const change = (Math.random() - 0.5) * 2;
+        return {
+          ...currency,
+          change,
+          history: generateHistory(currency.rate, change)
+        };
+      });
 
       setRates(ratesWithChange);
       setLastUpdate(new Date());
@@ -42,6 +62,51 @@ export default function ExchangeRates() {
       console.error('Failed to fetch exchange rates:', error);
       setLoading(false);
     }
+  };
+
+  const renderSparkline = (history: number[], isPositive: boolean) => {
+    if (history.length < 2) return null;
+
+    const width = 120;
+    const height = 40;
+    const padding = 2;
+
+    const min = Math.min(...history);
+    const max = Math.max(...history);
+    const range = max - min || 1;
+
+    const points = history.map((value, index) => {
+      const x = (index / (history.length - 1)) * width;
+      const y = height - ((value - min) / range) * (height - padding * 2) - padding;
+      return `${x},${y}`;
+    });
+
+    const pathD = `M ${points.join(' L ')}`;
+
+    const gradientId = `gradient-${Math.random().toString(36).substr(2, 9)}`;
+
+    return (
+      <svg width={width} height={height} className="sparkline">
+        <defs>
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor={isPositive ? '#34d399' : '#f87171'} stopOpacity="0.3" />
+            <stop offset="100%" stopColor={isPositive ? '#34d399' : '#f87171'} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path
+          d={`${pathD} L ${width},${height} L 0,${height} Z`}
+          fill={`url(#${gradientId})`}
+        />
+        <path
+          d={pathD}
+          fill="none"
+          stroke={isPositive ? '#34d399' : '#f87171'}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
   };
 
   if (loading) {
@@ -71,6 +136,11 @@ export default function ExchangeRates() {
                 <p>{rate.name}</p>
               </div>
             </div>
+
+            <div className="rate-chart">
+              {renderSparkline(rate.history, rate.change >= 0)}
+            </div>
+
             <div className="rate-value">
               <span className="rate-price">
                 {rate.rate.toFixed(4)}
