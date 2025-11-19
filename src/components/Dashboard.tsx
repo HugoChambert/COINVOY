@@ -4,6 +4,8 @@ import ExchangeRates from './ExchangeRates';
 import WalletConnect from './WalletConnect';
 import BankConnect from './BankConnect';
 import Transfer from './Transfer';
+import Transactions from './Transactions';
+import Settings from './Settings';
 import { useLanguage } from '../contexts/LanguageContext';
 import './Dashboard.css';
 
@@ -15,6 +17,7 @@ export default function Dashboard({ onLogout }: DashboardProps) {
   const { t, language, setLanguage } = useLanguage();
   const [user, setUser] = useState<any>(null);
   const [showLangDropdown, setShowLangDropdown] = useState(false);
+  const [currentView, setCurrentView] = useState<'dashboard' | 'transactions' | 'settings'>('dashboard');
 
   const languages = [
     { code: 'en' as const, name: 'English', flag: '🇺🇸' },
@@ -34,13 +37,13 @@ export default function Dashboard({ onLogout }: DashboardProps) {
       setUser(user);
 
       const { data: profile } = await supabase
-        .from('profiles')
+        .from('user_profiles')
         .select('*')
         .eq('id', user.id)
         .maybeSingle();
 
       if (!profile) {
-        await supabase.from('profiles').insert({
+        await supabase.from('user_profiles').insert({
           id: user.id,
           email: user.email || '',
           full_name: ''
@@ -94,32 +97,57 @@ export default function Dashboard({ onLogout }: DashboardProps) {
       <div className="dashboard-container">
         <div className="dashboard-sidebar">
           <nav className="dashboard-nav">
-            <button className="nav-item active">{t('dashboard.title')}</button>
-            <button className="nav-item">{t('dashboard.transactions')}</button>
-            <button className="nav-item">{t('dashboard.settings')}</button>
+            <button
+              className={`nav-item ${currentView === 'dashboard' ? 'active' : ''}`}
+              onClick={() => setCurrentView('dashboard')}
+            >
+              {t('dashboard.title')}
+            </button>
+            <button
+              className={`nav-item ${currentView === 'transactions' ? 'active' : ''}`}
+              onClick={() => setCurrentView('transactions')}
+            >
+              {t('dashboard.transactions')}
+            </button>
+            <button
+              className={`nav-item ${currentView === 'settings' ? 'active' : ''}`}
+              onClick={() => setCurrentView('settings')}
+            >
+              {t('dashboard.settings')}
+            </button>
           </nav>
         </div>
 
         <main className="dashboard-main">
-          <div className="dashboard-grid">
-            <div className="dashboard-section rates-section">
-              <h2>{t('dashboard.liveRates')}</h2>
-              <ExchangeRates />
-            </div>
+          {currentView === 'dashboard' && (
+            <div className="dashboard-grid">
+              <div className="dashboard-section rates-section">
+                <h2>{t('dashboard.liveRates')}</h2>
+                <ExchangeRates />
+              </div>
 
-            <div className="dashboard-section accounts-section">
-              <h2>{t('dashboard.connectedAccounts')}</h2>
-              <div className="accounts-grid">
-                <WalletConnect userId={user?.id} />
-                <BankConnect userId={user?.id} />
+              <div className="dashboard-section accounts-section">
+                <h2>{t('dashboard.connectedAccounts')}</h2>
+                <div className="accounts-grid">
+                  <WalletConnect userId={user?.id} />
+                  <BankConnect userId={user?.id} />
+                </div>
+              </div>
+
+              <div className="dashboard-section transfer-section">
+                <h2>{t('dashboard.sendMoney')}</h2>
+                <Transfer />
               </div>
             </div>
+          )}
 
-            <div className="dashboard-section transfer-section">
-              <h2>{t('dashboard.sendMoney')}</h2>
-              <Transfer />
-            </div>
-          </div>
+          {currentView === 'transactions' && user?.id && (
+            <Transactions userId={user.id} />
+          )}
+
+          {currentView === 'settings' && user?.id && (
+            <Settings userId={user.id} />
+          )}
         </main>
       </div>
     </div>
