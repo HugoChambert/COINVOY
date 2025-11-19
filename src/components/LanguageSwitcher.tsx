@@ -15,10 +15,8 @@ const languages: Language[] = [
 ];
 
 export default function LanguageSwitcher() {
-  const { language, setLanguage } = useLanguage();
+  const { setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-
-  const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
 
   const handleLanguageChange = (lang: Language) => {
     setLanguage(lang.code);
@@ -26,28 +24,16 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <div className="language-switcher">
-      <button
-        className="language-button"
-        onClick={() => setIsOpen(!isOpen)}
-        onBlur={() => setTimeout(() => setIsOpen(false), 200)}
-      >
-        <span className="language-flag">{currentLanguage.flag}</span>
-        <span className="language-code">{currentLanguage.code.toUpperCase()}</span>
-        <svg
-          className={`language-chevron ${isOpen ? 'open' : ''}`}
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-        >
-          <path
-            d="M4 6L8 10L12 6"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+    <div
+      className="language-switcher"
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <button className="language-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
         </svg>
       </button>
 
@@ -56,9 +42,7 @@ export default function LanguageSwitcher() {
           {languages.map((language) => (
             <button
               key={language.code}
-              className={`language-option ${
-                currentLanguage.code === language.code ? 'active' : ''
-              }`}
+              className="language-option"
               onClick={() => handleLanguageChange(language)}
             >
               <span className="language-flag">{language.flag}</span>
