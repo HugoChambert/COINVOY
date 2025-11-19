@@ -145,6 +145,22 @@
   font-size: 1.25rem;
 }
 
+.language-icon-button {
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.language-icon-button svg {
+  display: block;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.language-icon-button:hover svg {
+  transform: scale(1.1);
+}
+
 .dropdown-empty {
   padding: 1rem;
   color: #888888;

@@ -8,7 +8,7 @@ interface HeroProps {
 }
 
 function Hero({ onNavigateToAuth }: HeroProps) {
-  const { t, language, setLanguage } = useLanguage()
+  const { t, setLanguage } = useLanguage()
   const [showContactForm, setShowContactForm] = useState(false)
   const primaryBtnRef = useRef<HTMLButtonElement>(null)
   const getStartedBtnRef = useRef<HTMLButtonElement>(null)
@@ -22,8 +22,6 @@ function Hero({ onNavigateToAuth }: HeroProps) {
     { code: 'fr' as const, name: 'Français', flag: '🇫🇷' },
     { code: 'th' as const, name: 'ไทย', flag: '🇹🇭' }
   ]
-
-  const currentLanguage = languages.find(lang => lang.code === language) || languages[0]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,9 +77,12 @@ function Hero({ onNavigateToAuth }: HeroProps) {
               onMouseEnter={() => setOpenDropdown('language')}
               onMouseLeave={() => setOpenDropdown(null)}
             >
-              <button className="nav-link-button">
-                <span className="dropdown-flag">{currentLanguage.flag}</span>
-                {currentLanguage.code.toUpperCase()}
+              <button className="nav-link-button language-icon-button">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
               </button>
               {openDropdown === 'language' && (
                 <div className="dropdown-menu">
