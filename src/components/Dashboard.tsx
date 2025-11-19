@@ -14,7 +14,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ onLogout }: DashboardProps) {
-  const { t, language, setLanguage } = useLanguage();
+  const { t, setLanguage } = useLanguage();
   const [user, setUser] = useState<any>(null);
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const [currentView, setCurrentView] = useState<'dashboard' | 'transactions' | 'settings'>('dashboard');
@@ -24,8 +24,6 @@ export default function Dashboard({ onLogout }: DashboardProps) {
     { code: 'fr' as const, name: 'Français', flag: '🇫🇷' },
     { code: 'th' as const, name: 'ไทย', flag: '🇹🇭' }
   ];
-
-  const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
 
   useEffect(() => {
     loadUser();
@@ -72,8 +70,11 @@ export default function Dashboard({ onLogout }: DashboardProps) {
             onMouseLeave={() => setShowLangDropdown(false)}
           >
             <button className="lang-btn">
-              <span className="lang-flag">{currentLanguage.flag}</span>
-              <span>{currentLanguage.code.toUpperCase()}</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
             </button>
             {showLangDropdown && (
               <div className="lang-dropdown-menu">
