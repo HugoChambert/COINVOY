@@ -96,9 +96,10 @@ export default function Transactions({ userId }: TransactionsProps) {
         <div className="transactions-loading">Loading transactions...</div>
       ) : filteredTransactions.length === 0 ? (
         <div className="transactions-empty glass-card">
-          <div className="empty-icon">💸</div>
-          <h3>No transactions yet</h3>
-          <p>Your transaction history will appear here</p>
+          <div className="empty-state-content">
+            <h3>No {filter === 'all' ? '' : filter === 'send' ? 'sent' : 'received'} transactions yet</h3>
+            <p>Your transaction history will appear here</p>
+          </div>
         </div>
       ) : (
         <div className="transactions-list">
