@@ -82,7 +82,7 @@
 
 .lang-dropdown-menu {
   position: absolute;
-  top: calc(100% + 0.75rem);
+  top: calc(100% + 0.25rem);
   right: 0;
   background: rgba(20, 20, 20, 0.95);
   backdrop-filter: blur(40px) saturate(180%);
@@ -93,6 +93,17 @@
   z-index: 1000;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
   animation: dropdownSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lang-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -0.5rem;
+  left: 0;
+  right: 0;
+  height: 0.5rem;
+  background: transparent;
+  pointer-events: auto;
 }
 
 @keyframes dropdownSlideIn {
