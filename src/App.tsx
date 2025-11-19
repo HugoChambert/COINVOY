@@ -6,6 +6,7 @@ import Countries from './components/Countries'
 import CallToAction from './components/CallToAction'
 import Auth from './components/Auth'
 import Dashboard from './components/Dashboard'
+import MagneticCursor from './components/MagneticCursor'
 import { supabase } from './lib/supabase'
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
 
   return (
     <div className="app">
+      <MagneticCursor />
       <div className="content">
         <Hero onNavigateToAuth={() => setCurrentPage('auth')} />
         <Features />

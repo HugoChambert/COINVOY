@@ -10,6 +10,7 @@
   padding: 5rem 3rem;
   border-radius: 28px;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
 .cta-container:hover {
@@ -43,6 +44,7 @@
   position: relative;
   overflow: hidden;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
 .cta-button::before {

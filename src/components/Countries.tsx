@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import './Countries.css'
 
 function Countries() {
   const { t } = useLanguage()
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   const countries = [
     {
@@ -39,7 +40,14 @@ function Countries() {
         <p className="countries-subtitle">
           {t('countries.subtitle')}
         </p>
-        <div className="world-map-container glass-card">
+        <div
+          className="world-map-container glass-card"
+          ref={cardRef}
+          style={{
+            transform: hoveredCountry ? 'scale(1.01)' : 'scale(1)',
+            transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+          }}
+        >
           <svg viewBox="0 0 2000 1001" className="world-map" xmlns="http://www.w3.org/2000/svg">
             <g className="world-base">
               <path d="M300.8 102.5l2.3 1.5 1.8-0.6 2.1 1.3 1.5-0.8 2.8 0.9 1.9-1.2 3.4 1.6 2.1-0.5 1.8 1.9 2.9-0.3 1.5 2.1 3.1 0.8 2.6-1.4 1.9 1.6 2.3-0.9 3.1 1.1 1.8-1.5 2.6 0.7 1.4 2.3 3.2-0.4 2.1 1.8 1.5-0.6 2.9 1.4 1.8-1.1 2.4 0.9 3.6-0.8 2.1 1.6-1.9 2.3-2.8 0.5-1.6 2.1-3.2-0.6-2.1 1.9-2.9-0.8-1.5 1.7-3.4-0.4-2.3 1.5-1.8-1.3-3.1 0.7-2.6-1.6-1.9 0.9-2.8-1.4-3.2 0.6-1.8-2.1-2.5 0.8-3.1-1.2z"/>
