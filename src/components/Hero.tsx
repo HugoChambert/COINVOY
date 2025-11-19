@@ -17,15 +17,6 @@ function Hero({ onNavigateToAuth }: HeroProps) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
 
-  const features = [
-    { name: 'Instant Transfers' },
-    { name: 'Multi-Currency Support' },
-    { name: 'Bank Integration' },
-    { name: 'Crypto Wallets' },
-    { name: 'Real-Time Exchange Rates' },
-    { name: 'Secure Transactions' }
-  ]
-
   const languages = [
     { code: 'en' as const, name: 'English', flag: '🇺🇸' },
     { code: 'fr' as const, name: 'Français', flag: '🇫🇷' },
@@ -64,24 +55,6 @@ function Hero({ onNavigateToAuth }: HeroProps) {
         <div className="nav-container">
           <div className="logo">CoinVoy</div>
           <div className="nav-links">
-            <div
-              className="nav-dropdown"
-              onMouseEnter={() => setOpenDropdown('features')}
-              onMouseLeave={() => setOpenDropdown(null)}
-            >
-              <button className="nav-link-button">
-                {t('nav.features')}
-              </button>
-              {openDropdown === 'features' && (
-                <div className="dropdown-menu">
-                  {features.map((feature, index) => (
-                    <a key={index} href="#features" className="dropdown-item">
-                      {feature.name}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
             <div
               className="nav-dropdown"
               onMouseEnter={() => setOpenDropdown('contact')}
