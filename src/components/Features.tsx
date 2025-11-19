@@ -1,32 +1,34 @@
 import { useRef, useState } from 'react'
+import { useLanguage } from '../contexts/LanguageContext'
 import './Features.css'
 
 function Features() {
+  const { t } = useLanguage()
 
   const features = [
     {
-      title: 'Instant Transfers',
-      description: 'Send money globally in seconds with our lightning-fast transfer system. No more waiting days for your money to arrive.',
+      title: t('featuresNew.instantTransfers.title'),
+      description: t('featuresNew.instantTransfers.description'),
     },
     {
-      title: 'Multi-Currency Support',
-      description: 'Support for over 150 currencies worldwide. Exchange between currencies with competitive rates instantly.',
+      title: t('featuresNew.multiCurrency.title'),
+      description: t('featuresNew.multiCurrency.description'),
     },
     {
-      title: 'Bank Integration',
-      description: 'Connect your bank accounts seamlessly. Link multiple accounts and manage all your finances in one place.',
+      title: t('featuresNew.bankIntegration.title'),
+      description: t('featuresNew.bankIntegration.description'),
     },
     {
-      title: 'Crypto Wallets',
-      description: 'Store and manage your cryptocurrency safely. Support for Bitcoin, Ethereum, and other major cryptocurrencies.',
+      title: t('featuresNew.cryptoWallets.title'),
+      description: t('featuresNew.cryptoWallets.description'),
     },
     {
-      title: 'Real-Time Exchange Rates',
-      description: 'Get live exchange rates updated every minute. Always know the exact amount you will receive.',
+      title: t('featuresNew.realTimeRates.title'),
+      description: t('featuresNew.realTimeRates.description'),
     },
     {
-      title: 'Secure Transactions',
-      description: 'Bank-level security with end-to-end encryption. Your money and data are always protected.',
+      title: t('featuresNew.secureTransactions.title'),
+      description: t('featuresNew.secureTransactions.description'),
     },
   ]
 
@@ -53,8 +55,8 @@ function Features() {
   return (
     <section id="features" className="features">
       <div className="features-container">
-        <h2 className="section-title">Powerful Features</h2>
-        <p className="section-description">Everything you need to manage your money globally</p>
+        <h2 className="section-title">{t('featuresNew.title')}</h2>
+        <p className="section-description">{t('featuresNew.description')}</p>
         <div className="features-grid">
           {features.map((feature, index) => (
             <div

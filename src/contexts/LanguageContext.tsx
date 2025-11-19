@@ -100,6 +100,20 @@ const translations: Translations = {
   'footer.terms': { en: 'Terms of Service', fr: 'Conditions d\'utilisation', th: 'ข้อกำหนดการใช้งาน' },
   'footer.support': { en: 'Support', fr: 'Assistance', th: 'ช่วยเหลือ' },
   'footer.copyright': { en: '© 2025 CoinVoy. All rights reserved.', fr: '© 2025 CoinVoy. Tous droits réservés.', th: '© 2025 CoinVoy สงวนลิขสิทธิ์' },
+  'featuresNew.title': { en: 'Powerful Features', fr: 'Fonctionnalités puissantes', th: 'คุณสมบัติที่ทรงพลัง' },
+  'featuresNew.description': { en: 'Everything you need to manage your money globally', fr: 'Tout ce dont vous avez besoin pour gérer votre argent dans le monde entier', th: 'ทุกสิ่งที่คุณต้องการเพื่อจัดการเงินของคุณทั่วโลก' },
+  'featuresNew.instantTransfers.title': { en: 'Instant Transfers', fr: 'Transferts instantanés', th: 'โอนเงินทันที' },
+  'featuresNew.instantTransfers.description': { en: 'Send money globally in seconds with our lightning-fast transfer system. No more waiting days for your money to arrive.', fr: 'Envoyez de l\'argent dans le monde entier en quelques secondes avec notre système de transfert ultra-rapide. Plus besoin d\'attendre des jours pour que votre argent arrive.', th: 'ส่งเงินทั่วโลกในไม่กี่วินาทีด้วยระบบโอนที่รวดเร็วเหมือนสายฟ้า ไม่ต้องรอหลายวันให้เงินของคุณมาถึง' },
+  'featuresNew.multiCurrency.title': { en: 'Multi-Currency Support', fr: 'Prise en charge multi-devises', th: 'รองรับหลายสกุลเงิน' },
+  'featuresNew.multiCurrency.description': { en: 'Support for over 150 currencies worldwide. Exchange between currencies with competitive rates instantly.', fr: 'Prise en charge de plus de 150 devises dans le monde. Échangez entre devises avec des taux compétitifs instantanément.', th: 'รองรับสกุลเงินมากกว่า 150 สกุลทั่วโลก แลกเปลี่ยนระหว่างสกุลเงินด้วยอัตราที่แข่งขันได้ทันที' },
+  'featuresNew.bankIntegration.title': { en: 'Bank Integration', fr: 'Intégration bancaire', th: 'เชื่อมต่อธนาคาร' },
+  'featuresNew.bankIntegration.description': { en: 'Connect your bank accounts seamlessly. Link multiple accounts and manage all your finances in one place.', fr: 'Connectez vos comptes bancaires en toute transparence. Liez plusieurs comptes et gérez toutes vos finances en un seul endroit.', th: 'เชื่อมต่อบัญชีธนาคารของคุณได้อย่างราบรื่น เชื่อมโยงหลายบัญชีและจัดการการเงินทั้งหมดของคุณในที่เดียว' },
+  'featuresNew.cryptoWallets.title': { en: 'Crypto Wallets', fr: 'Portefeuilles crypto', th: 'กระเป๋าคริปโต' },
+  'featuresNew.cryptoWallets.description': { en: 'Store and manage your cryptocurrency safely. Support for Bitcoin, Ethereum, and other major cryptocurrencies.', fr: 'Stockez et gérez votre crypto-monnaie en toute sécurité. Prise en charge de Bitcoin, Ethereum et d\'autres crypto-monnaies majeures.', th: 'เก็บและจัดการคริปโทเคอเรนซีของคุณอย่างปลอดภัย รองรับ Bitcoin, Ethereum และคริปโทเคอเรนซีหลักอื่นๆ' },
+  'featuresNew.realTimeRates.title': { en: 'Real-Time Exchange Rates', fr: 'Taux de change en temps réel', th: 'อัตราแลกเปลี่ยนแบบเรียลไทม์' },
+  'featuresNew.realTimeRates.description': { en: 'Get live exchange rates updated every minute. Always know the exact amount you will receive.', fr: 'Obtenez des taux de change en direct mis à jour chaque minute. Sachez toujours le montant exact que vous recevrez.', th: 'รับอัตราแลกเปลี่ยนสดที่อัปเดตทุกนาที รู้จำนวนเงินที่คุณจะได้รับอย่างแน่นอนเสมอ' },
+  'featuresNew.secureTransactions.title': { en: 'Secure Transactions', fr: 'Transactions sécurisées', th: 'ธุรกรรมที่ปลอดภัย' },
+  'featuresNew.secureTransactions.description': { en: 'Bank-level security with end-to-end encryption. Your money and data are always protected.', fr: 'Sécurité de niveau bancaire avec cryptage de bout en bout. Votre argent et vos données sont toujours protégés.', th: 'ความปลอดภัยระดับธนาคารด้วยการเข้ารหัสแบบครบวงจร เงินและข้อมูลของคุณได้รับการปกป้องเสมอ' },
 };
 
 interface LanguageContextType {
