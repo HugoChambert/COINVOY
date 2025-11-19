@@ -2,7 +2,7 @@
   position: fixed;
   width: 40px;
   height: 40px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  border: 2px solid rgba(160, 160, 160, 0.6);
   border-radius: 50%;
   pointer-events: none;
   z-index: 10000;
@@ -19,21 +19,21 @@
 .magnetic-cursor.hovering {
   width: 60px;
   height: 60px;
-  border-color: rgba(30, 215, 96, 0.8);
-  background: rgba(30, 215, 96, 0.1);
+  border-color: rgba(180, 180, 180, 0.8);
+  background: rgba(160, 160, 160, 0.1);
 }
 
 .magnetic-cursor.clicking {
   width: 35px;
   height: 35px;
-  border-color: rgba(30, 215, 96, 1);
+  border-color: rgba(200, 200, 200, 0.9);
 }
 
 .magnetic-cursor-dot {
   position: fixed;
   width: 6px;
   height: 6px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(180, 180, 180, 0.9);
   border-radius: 50%;
   pointer-events: none;
   z-index: 10001;
@@ -48,7 +48,7 @@
 .magnetic-cursor-dot.hovering {
   width: 8px;
   height: 8px;
-  background: rgba(30, 215, 96, 1);
+  background: rgba(200, 200, 200, 1);
 }
 
 .magnetic-cursor-dot.clicking {
