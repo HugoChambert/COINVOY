@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { useLanguage } from '../contexts/LanguageContext'
 import './Auth.css'
 
 function Auth() {
+  const { t } = useLanguage()
   const [isSignUp, setIsSignUp] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,7 +17,7 @@ function Auth() {
     setMessage(null)
 
     if (isSignUp && password !== confirmPassword) {
-      setMessage({ type: 'error', text: 'Passwords do not match' })
+      setMessage({ type: 'error', text: t('auth.passwordsDoNotMatch') })
       return
     }
 
@@ -36,7 +38,7 @@ function Auth() {
         } else {
           setMessage({
             type: 'success',
-            text: 'Account created successfully!'
+            text: t('auth.accountCreated')
           })
         }
       } else {
@@ -53,7 +55,7 @@ function Auth() {
         }
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Network error. Please try again.' })
+      setMessage({ type: 'error', text: t('auth.networkError') })
     } finally {
       setIsSubmitting(false)
     }
@@ -64,52 +66,52 @@ function Auth() {
       <div className="auth-container glass-card">
         <div className="auth-header">
           <h1 className="auth-title">
-            {isSignUp ? 'Create Account' : 'Welcome Back'}
+            {isSignUp ? t('auth.createAccount') : t('auth.welcomeBack')}
           </h1>
           <p className="auth-description">
             {isSignUp
-              ? 'Sign up to start transferring money globally'
-              : 'Sign in to continue your transfers'
+              ? t('auth.signUpDescription')
+              : t('auth.signInDescription')
             }
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{t('auth.email')}</label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="your@email.com"
+              placeholder={t('auth.emailPlaceholder')}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t('auth.password')}</label>
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="••••••••"
+              placeholder={t('auth.passwordPlaceholder')}
               minLength={6}
             />
           </div>
 
           {isSignUp && (
             <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm Password</label>
+              <label htmlFor="confirmPassword">{t('auth.confirmPassword')}</label>
               <input
                 type="password"
                 id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                placeholder="••••••••"
+                placeholder={t('auth.passwordPlaceholder')}
                 minLength={6}
               />
             </div>
@@ -122,13 +124,13 @@ function Auth() {
           )}
 
           <button type="submit" className="auth-submit-button" disabled={isSubmitting}>
-            {isSubmitting ? 'Processing...' : (isSignUp ? 'Create Account' : 'Sign In')}
+            {isSubmitting ? t('auth.processing') : (isSignUp ? t('auth.createAccount') : t('auth.signIn'))}
           </button>
         </form>
 
         <div className="auth-toggle">
           <p>
-            {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+            {isSignUp ? t('auth.alreadyHaveAccount') : t('auth.dontHaveAccount')}
             <button
               type="button"
               onClick={() => {
@@ -140,12 +142,12 @@ function Auth() {
               }}
               className="toggle-button"
             >
-              {isSignUp ? 'Sign In' : 'Sign Up'}
+              {isSignUp ? t('auth.signIn') : t('auth.signUp')}
             </button>
           </p>
         </div>
 
-        <a href="/" className="back-home">← Back to Home</a>
+        <a href="/" className="back-home">{t('auth.backHome')}</a>
       </div>
     </div>
   )
