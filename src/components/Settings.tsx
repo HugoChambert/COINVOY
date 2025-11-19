@@ -15,6 +15,8 @@ export default function Settings({ userId }: SettingsProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     loadProfile()
@@ -63,7 +65,33 @@ export default function Settings({ userId }: SettingsProps) {
   }
 
   const handleChangePassword = async () => {
-    setMessage({ type: 'success', text: 'Password reset email sent to your inbox' })
+    setMessage(null)
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+
+    if (error) {
+      setMessage({ type: 'error', text: 'Failed to send password reset email' })
+    } else {
+      setMessage({ type: 'success', text: 'Password reset email sent to your inbox' })
+    }
+  }
+
+  const handleDeleteAccount = async () => {
+    setIsDeleting(true)
+    setMessage(null)
+
+    const { error: deleteError } = await supabase.rpc('delete_user')
+
+    if (deleteError) {
+      setMessage({ type: 'error', text: 'Failed to delete account. Please contact support.' })
+      setIsDeleting(false)
+      setShowDeleteConfirm(false)
+    } else {
+      await supabase.auth.signOut()
+      window.location.href = '/'
+    }
   }
 
   return (
@@ -202,7 +230,34 @@ export default function Settings({ userId }: SettingsProps) {
                 <h3>Delete Account</h3>
                 <p>Permanently delete your account and all associated data</p>
               </div>
-              <button className="danger-btn">Delete Account</button>
+              {!showDeleteConfirm ? (
+                <button
+                  className="danger-btn"
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
+                  Delete Account
+                </button>
+              ) : (
+                <div className="delete-confirm">
+                  <p className="confirm-text">Are you sure? This cannot be undone.</p>
+                  <div className="confirm-actions">
+                    <button
+                      className="cancel-delete-btn"
+                      onClick={() => setShowDeleteConfirm(false)}
+                      disabled={isDeleting}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="confirm-delete-btn"
+                      onClick={handleDeleteAccount}
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? 'Deleting...' : 'Yes, Delete My Account'}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

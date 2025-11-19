@@ -54,14 +54,32 @@ export default function Transfer() {
     e.preventDefault();
     setLoading(true);
 
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
-    setSuccess(true);
-    setAmount('');
-    setToAddress('');
+    const { error } = await supabase.from('transactions').insert({
+      user_id: user.id,
+      type: 'send',
+      amount: parseFloat(amount),
+      currency: currency,
+      recipient_email: transferType === 'fiat' ? toAddress : null,
+      recipient_wallet: transferType === 'crypto' ? toAddress : null,
+      status: 'completed'
+    });
+
+    if (!error) {
+      setSuccess(true);
+      setAmount('');
+      setToAddress('');
+      setFromAccount('');
+
+      setTimeout(() => setSuccess(false), 3000);
+    }
+
     setLoading(false);
-
-    setTimeout(() => setSuccess(false), 3000);
   };
 
   return (
