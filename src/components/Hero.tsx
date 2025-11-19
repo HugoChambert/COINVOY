@@ -17,10 +17,13 @@ function Hero({ onNavigateToAuth }: HeroProps) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
 
-  const countries = [
-    { name: 'France', flag: '🇫🇷' },
-    { name: 'United States', flag: '🇺🇸' },
-    { name: 'Thailand', flag: '🇹🇭' },
+  const features = [
+    { name: 'Instant Transfers', icon: '⚡' },
+    { name: 'Multi-Currency Support', icon: '💱' },
+    { name: 'Bank Integration', icon: '🏦' },
+    { name: 'Crypto Wallets', icon: '🔐' },
+    { name: 'Real-Time Exchange Rates', icon: '📊' },
+    { name: 'Secure Transactions', icon: '🛡️' }
   ]
 
   const languages = [
@@ -71,24 +74,10 @@ function Hero({ onNavigateToAuth }: HeroProps) {
               </button>
               {openDropdown === 'features' && (
                 <div className="dropdown-menu">
-                  <div className="dropdown-empty">{t('nav.comingSoon')}</div>
-                </div>
-              )}
-            </div>
-            <div
-              className="nav-dropdown"
-              onMouseEnter={() => setOpenDropdown('countries')}
-              onMouseLeave={() => setOpenDropdown(null)}
-            >
-              <button className="nav-link-button">
-                {t('nav.countries')}
-              </button>
-              {openDropdown === 'countries' && (
-                <div className="dropdown-menu">
-                  {countries.map((country, index) => (
-                    <a key={index} href="#countries" className="dropdown-item">
-                      <span className="dropdown-flag">{country.flag}</span>
-                      {country.name}
+                  {features.map((feature, index) => (
+                    <a key={index} href="#features" className="dropdown-item">
+                      <span className="dropdown-flag">{feature.icon}</span>
+                      {feature.name}
                     </a>
                   ))}
                 </div>
