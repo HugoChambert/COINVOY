@@ -18,12 +18,12 @@ function Hero({ onNavigateToAuth }: HeroProps) {
   const [isScrolled, setIsScrolled] = useState(false)
 
   const features = [
-    { name: 'Instant Transfers', icon: '⚡' },
-    { name: 'Multi-Currency Support', icon: '💱' },
-    { name: 'Bank Integration', icon: '🏦' },
-    { name: 'Crypto Wallets', icon: '🔐' },
-    { name: 'Real-Time Exchange Rates', icon: '📊' },
-    { name: 'Secure Transactions', icon: '🛡️' }
+    { name: 'Instant Transfers' },
+    { name: 'Multi-Currency Support' },
+    { name: 'Bank Integration' },
+    { name: 'Crypto Wallets' },
+    { name: 'Real-Time Exchange Rates' },
+    { name: 'Secure Transactions' }
   ]
 
   const languages = [
@@ -76,7 +76,6 @@ function Hero({ onNavigateToAuth }: HeroProps) {
                 <div className="dropdown-menu">
                   {features.map((feature, index) => (
                     <a key={index} href="#features" className="dropdown-item">
-                      <span className="dropdown-flag">{feature.icon}</span>
                       {feature.name}
                     </a>
                   ))}

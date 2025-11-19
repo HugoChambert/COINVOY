@@ -1,26 +1,38 @@
 import { useRef, useState } from 'react'
-import { useLanguage } from '../contexts/LanguageContext'
 import './Features.css'
 
 function Features() {
-  const { t } = useLanguage()
 
   const features = [
     {
-      title: t('features.fast.title'),
-      description: t('features.fast.description'),
+      title: 'Instant Transfers',
+      description: 'Send money globally in seconds with our lightning-fast transfer system. No more waiting days for your money to arrive.',
+      icon: '⚡',
     },
     {
-      title: t('features.lowFees.title'),
-      description: t('features.lowFees.description'),
+      title: 'Multi-Currency Support',
+      description: 'Support for over 150 currencies worldwide. Exchange between currencies with competitive rates instantly.',
+      icon: '💱',
     },
     {
-      title: t('features.secure.title'),
-      description: t('features.secure.description'),
+      title: 'Bank Integration',
+      description: 'Connect your bank accounts seamlessly. Link multiple accounts and manage all your finances in one place.',
+      icon: '🏦',
     },
     {
-      title: t('features.simple.title'),
-      description: t('features.simple.description'),
+      title: 'Crypto Wallets',
+      description: 'Store and manage your cryptocurrency safely. Support for Bitcoin, Ethereum, and other major cryptocurrencies.',
+      icon: '🔐',
+    },
+    {
+      title: 'Real-Time Exchange Rates',
+      description: 'Get live exchange rates updated every minute. Always know the exact amount you will receive.',
+      icon: '📊',
+    },
+    {
+      title: 'Secure Transactions',
+      description: 'Bank-level security with end-to-end encryption. Your money and data are always protected.',
+      icon: '🛡️',
     },
   ]
 
@@ -47,7 +59,8 @@ function Features() {
   return (
     <section id="features" className="features">
       <div className="features-container">
-        <h2 className="section-title">{t('features.title')}</h2>
+        <h2 className="section-title">Powerful Features</h2>
+        <p className="section-description">Everything you need to manage your money globally</p>
         <div className="features-grid">
           {features.map((feature, index) => (
             <div
@@ -60,6 +73,7 @@ function Features() {
                 '--y': `${mousePositions[index].y}px`,
               } as React.CSSProperties}
             >
+              <div className="feature-icon">{feature.icon}</div>
               <h3 className="feature-title">{feature.title}</h3>
               <p className="feature-description">{feature.description}</p>
             </div>
