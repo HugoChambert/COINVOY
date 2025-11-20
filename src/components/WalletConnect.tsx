@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
+import { usePhantomWallet } from '../contexts/PhantomWalletContext';
 import './WalletConnect.css';
 
 interface Wallet {
@@ -16,6 +17,7 @@ interface WalletConnectProps {
 
 export default function WalletConnect({ userId }: WalletConnectProps) {
   const { t } = useLanguage();
+  const { connected, connecting, publicKey, balances, connect, disconnect } = usePhantomWallet();
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [showAddWallet, setShowAddWallet] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
@@ -27,6 +29,50 @@ export default function WalletConnect({ userId }: WalletConnectProps) {
       loadWallets();
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (connected && publicKey) {
+      savePhantomWallet();
+    }
+  }, [connected, publicKey]);
+
+  const savePhantomWallet = async () => {
+    if (!publicKey) return;
+
+    const { data: existing } = await supabase
+      .from('crypto_wallets')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('wallet_address', publicKey)
+      .maybeSingle();
+
+    if (!existing) {
+      await supabase.from('crypto_wallets').insert({
+        user_id: userId,
+        wallet_address: publicKey,
+        wallet_type: 'Phantom',
+        is_verified: true
+      });
+      loadWallets();
+    }
+  };
+
+  const handleConnectPhantom = async () => {
+    try {
+      await connect();
+    } catch (error) {
+      console.error('Failed to connect Phantom:', error);
+    }
+  };
+
+  const handleDisconnectPhantom = async () => {
+    try {
+      await disconnect();
+      loadWallets();
+    } catch (error) {
+      console.error('Failed to disconnect Phantom:', error);
+    }
+  };
 
   const loadWallets = async () => {
     const { data } = await supabase
@@ -76,6 +122,45 @@ export default function WalletConnect({ userId }: WalletConnectProps) {
         </button>
       </div>
 
+      <div className="phantom-section">
+        <h4>Phantom Wallet</h4>
+        {!connected ? (
+          <button
+            onClick={handleConnectPhantom}
+            disabled={connecting}
+            className="phantom-connect-btn"
+          >
+            {connecting ? 'Connecting...' : 'Connect Phantom'}
+          </button>
+        ) : (
+          <div className="phantom-connected">
+            <div className="phantom-info">
+              <div className="phantom-badge">Connected</div>
+              <div className="phantom-address">
+                {publicKey?.slice(0, 4)}...{publicKey?.slice(-4)}
+              </div>
+            </div>
+            <div className="phantom-balances">
+              <div className="balance-item">
+                <span className="balance-label">SOL</span>
+                <span className="balance-value">{balances.sol.toFixed(4)}</span>
+              </div>
+              <div className="balance-item">
+                <span className="balance-label">USDC</span>
+                <span className="balance-value">{balances.usdc.toFixed(2)}</span>
+              </div>
+              <div className="balance-item">
+                <span className="balance-label">USDT</span>
+                <span className="balance-value">{balances.usdt.toFixed(2)}</span>
+              </div>
+            </div>
+            <button onClick={handleDisconnectPhantom} className="phantom-disconnect-btn">
+              Disconnect
+            </button>
+          </div>
+        )}
+      </div>
+
       {showAddWallet && (
         <form onSubmit={handleAddWallet} className="add-wallet-form">
           <div className="form-group">
@@ -89,6 +174,7 @@ export default function WalletConnect({ userId }: WalletConnectProps) {
               <option value="Coinbase">Coinbase Wallet</option>
               <option value="Trust Wallet">Trust Wallet</option>
               <option value="Ledger">Ledger</option>
+              <option value="Phantom">Phantom</option>
               <option value="Other">Other</option>
             </select>
           </div>

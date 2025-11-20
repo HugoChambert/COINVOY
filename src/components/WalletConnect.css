@@ -180,6 +180,36 @@
   border-color: rgba(239, 68, 68, 0.5);
 }
 
+.phantom-balances {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.balance-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(171, 82, 255, 0.2);
+}
+
+.balance-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.balance-value {
+  font-size: 0.95rem;
+  color: #ab52ff;
+  font-weight: 700;
+}
+
 [data-theme="light"] .wallet-connect {
   background: rgba(0, 0, 0, 0.02);
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -247,4 +277,17 @@
 
 [data-theme="light"] .wallet-address {
   color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .balance-item {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(171, 82, 255, 0.15);
+}
+
+[data-theme="light"] .balance-label {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .balance-value {
+  color: #7537cc;
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
+import { usePhantomWallet } from '../contexts/PhantomWalletContext';
 import './Transfer.css';
 
 interface Wallet {
@@ -18,15 +19,17 @@ interface BankAccount {
 
 export default function Transfer() {
   const { t } = useLanguage();
+  const { connected, publicKey, sendSOL, sendUSDC, sendUSDT } = usePhantomWallet();
   const [transferType, setTransferType] = useState<'crypto' | 'fiat'>('crypto');
   const [fromAccount, setFromAccount] = useState('');
   const [toAddress, setToAddress] = useState('');
   const [amount, setAmount] = useState('');
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState('SOL');
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadAccounts();
@@ -53,6 +56,8 @@ export default function Transfer() {
   const handleTransfer = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
+    setSuccess(false);
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
@@ -60,23 +65,43 @@ export default function Transfer() {
       return;
     }
 
-    const { error } = await supabase.from('transactions').insert({
-      user_id: user.id,
-      type: 'send',
-      amount: parseFloat(amount),
-      currency: currency,
-      recipient_email: transferType === 'fiat' ? toAddress : null,
-      recipient_wallet: transferType === 'crypto' ? toAddress : null,
-      status: 'completed'
-    });
+    try {
+      let transactionSignature = null;
 
-    if (!error) {
-      setSuccess(true);
-      setAmount('');
-      setToAddress('');
-      setFromAccount('');
+      if (transferType === 'crypto' && connected && publicKey) {
+        if (currency === 'SOL') {
+          transactionSignature = await sendSOL(toAddress, parseFloat(amount));
+        } else if (currency === 'USDC') {
+          transactionSignature = await sendUSDC(toAddress, parseFloat(amount));
+        } else if (currency === 'USDT') {
+          transactionSignature = await sendUSDT(toAddress, parseFloat(amount));
+        }
+      }
 
-      setTimeout(() => setSuccess(false), 3000);
+      const { error: dbError } = await supabase.from('transactions').insert({
+        user_id: user.id,
+        type: 'send',
+        amount: parseFloat(amount),
+        currency: currency,
+        recipient_email: transferType === 'fiat' ? toAddress : null,
+        recipient_wallet: transferType === 'crypto' ? toAddress : null,
+        status: transactionSignature ? 'completed' : 'pending',
+        transaction_hash: transactionSignature
+      });
+
+      if (!dbError) {
+        setSuccess(true);
+        setAmount('');
+        setToAddress('');
+        setFromAccount('');
+
+        setTimeout(() => setSuccess(false), 5000);
+      } else {
+        setError('Failed to record transaction');
+      }
+    } catch (err) {
+      console.error('Transfer error:', err);
+      setError(err instanceof Error ? err.message : 'Transfer failed');
     }
 
     setLoading(false);
@@ -159,14 +184,17 @@ export default function Transfer() {
               onChange={(e) => setCurrency(e.target.value)}
               className="form-select"
             >
-              <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="THB">THB</option>
-              {transferType === 'crypto' && (
+              {transferType === 'crypto' ? (
                 <>
-                  <option value="BTC">BTC</option>
-                  <option value="ETH">ETH</option>
+                  <option value="SOL">SOL</option>
+                  <option value="USDC">USDC</option>
                   <option value="USDT">USDT</option>
+                </>
+              ) : (
+                <>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="THB">THB</option>
                 </>
               )}
             </select>
@@ -179,7 +207,19 @@ export default function Transfer() {
           </div>
         )}
 
-        <button type="submit" disabled={loading} className="transfer-btn">
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
+
+        {transferType === 'crypto' && ['SOL', 'USDC', 'USDT'].includes(currency) && !connected && (
+          <div className="warning-message">
+            Please connect your Phantom wallet to send {currency}
+          </div>
+        )}
+
+        <button type="submit" disabled={loading || (transferType === 'crypto' && !connected)} className="transfer-btn">
           {loading ? t('transfer.processing') : t('transfer.send')}
         </button>
       </form>
