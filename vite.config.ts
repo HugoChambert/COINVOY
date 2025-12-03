@@ -13,11 +13,19 @@ export default defineConfig(({ mode }) => {
     define: {
       'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(env.VITE_SUPABASE_URL),
       'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(env.VITE_SUPABASE_ANON_KEY),
-      'global': 'globalThis'
+      'global': 'globalThis',
+      'Buffer': ['buffer', 'Buffer']
     },
     resolve: {
       alias: {
         buffer: 'buffer'
+      }
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        define: {
+          global: 'globalThis'
+        }
       }
     }
   }
