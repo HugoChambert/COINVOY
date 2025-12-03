@@ -6,9 +6,22 @@
   height: 100%;
   z-index: 0;
   pointer-events: none;
+  touch-action: none;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
+  .interactive-background {
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 480px) {
+  .interactive-background {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
   .interactive-background {
     display: none;
   }

@@ -18,6 +18,7 @@ export default function InteractiveBackground() {
   const mouseRef = useRef({ x: 0, y: 0 })
   const particlesRef = useRef<Particle[]>([])
   const animationFrameRef = useRef<number>()
+  const isMobileRef = useRef(false)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -34,9 +35,21 @@ export default function InteractiveBackground() {
 
     const initParticles = () => {
       particlesRef.current = []
-      const particleCount = Math.floor((canvas.width * canvas.height) / 12000)
+      isMobileRef.current = window.innerWidth <= 768
+      const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024
 
-      for (let i = 0; i < particleCount; i++) {
+      let densityFactor = 12000
+      if (isMobileRef.current) {
+        densityFactor = 20000
+      } else if (isTablet) {
+        densityFactor = 15000
+      }
+
+      const particleCount = Math.floor((canvas.width * canvas.height) / densityFactor)
+      const maxParticles = isMobileRef.current ? 50 : isTablet ? 100 : 200
+      const finalCount = Math.min(particleCount, maxParticles)
+
+      for (let i = 0; i < finalCount; i++) {
         const x = Math.random() * canvas.width
         const y = Math.random() * canvas.height
 
@@ -58,12 +71,22 @@ export default function InteractiveBackground() {
       mouseRef.current = { x: e.clientX, y: e.clientY }
     }
 
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+      }
+    }
+
     const drawConnections = () => {
+      if (isMobileRef.current) return
+
       const particles = particlesRef.current
       const maxDistance = 120
+      const maxConnections = window.innerWidth <= 1024 ? 3 : 5
 
       for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
+        let connections = 0
+        for (let j = i + 1; j < particles.length && connections < maxConnections; j++) {
           const dx = particles[i].x - particles[j].x
           const dy = particles[i].y - particles[j].y
           const distance = Math.sqrt(dx * dx + dy * dy)
@@ -76,6 +99,7 @@ export default function InteractiveBackground() {
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
             ctx.stroke()
+            connections++
           }
         }
       }
@@ -87,18 +111,19 @@ export default function InteractiveBackground() {
 
       const mouse = mouseRef.current
       const particles = particlesRef.current
+      const interactionDistance = isMobileRef.current ? 150 : 200
+      const forceMultiplier = isMobileRef.current ? 0.3 : 0.5
 
       particles.forEach((particle) => {
         const dx = mouse.x - particle.x
         const dy = mouse.y - particle.y
         const distance = Math.sqrt(dx * dx + dy * dy)
-        const maxDistance = 200
 
-        if (distance < maxDistance) {
-          const force = (maxDistance - distance) / maxDistance
+        if (distance < interactionDistance) {
+          const force = (interactionDistance - distance) / interactionDistance
           const angle = Math.atan2(dy, dx)
-          particle.vx += Math.cos(angle) * force * 0.5
-          particle.vy += Math.sin(angle) * force * 0.5
+          particle.vx += Math.cos(angle) * force * forceMultiplier
+          particle.vy += Math.sin(angle) * force * forceMultiplier
         }
 
         const baseDx = particle.baseX - particle.x
@@ -115,17 +140,19 @@ export default function InteractiveBackground() {
         const speed = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy)
         const dynamicSize = particle.size + Math.min(speed * 0.3, 2)
 
-        const gradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, dynamicSize * 2
-        )
-        gradient.addColorStop(0, `hsla(${particle.hue}, 80%, 70%, ${particle.opacity})`)
-        gradient.addColorStop(1, `hsla(${particle.hue}, 80%, 50%, 0)`)
+        if (!isMobileRef.current) {
+          const gradient = ctx.createRadialGradient(
+            particle.x, particle.y, 0,
+            particle.x, particle.y, dynamicSize * 2
+          )
+          gradient.addColorStop(0, `hsla(${particle.hue}, 80%, 70%, ${particle.opacity})`)
+          gradient.addColorStop(1, `hsla(${particle.hue}, 80%, 50%, 0)`)
 
-        ctx.beginPath()
-        ctx.fillStyle = gradient
-        ctx.arc(particle.x, particle.y, dynamicSize * 2, 0, Math.PI * 2)
-        ctx.fill()
+          ctx.beginPath()
+          ctx.fillStyle = gradient
+          ctx.arc(particle.x, particle.y, dynamicSize * 2, 0, Math.PI * 2)
+          ctx.fill()
+        }
 
         ctx.beginPath()
         ctx.fillStyle = `hsla(${particle.hue}, 90%, 80%, ${particle.opacity * 0.8})`
@@ -141,11 +168,13 @@ export default function InteractiveBackground() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
     window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('touchmove', handleTouchMove, { passive: true })
     animate()
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
       window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('touchmove', handleTouchMove)
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
       }
