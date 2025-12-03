@@ -25,37 +25,51 @@ function Auth() {
 
     try {
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
-          password
+          password,
+          options: {
+            emailRedirectTo: window.location.origin
+          }
         })
 
         if (error) {
+          console.error('Signup error:', error)
           setMessage({
             type: 'error',
-            text: error.message
+            text: error.message || 'Signup failed. Please try again.'
           })
-        } else {
+        } else if (data.user) {
           setMessage({
             type: 'success',
             text: t('auth.accountCreated')
           })
         }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
         })
 
         if (error) {
+          console.error('Sign in error:', error)
           setMessage({
             type: 'error',
-            text: error.message
+            text: error.message || 'Sign in failed. Please check your credentials.'
+          })
+        } else if (data.session) {
+          setMessage({
+            type: 'success',
+            text: 'Successfully signed in!'
           })
         }
       }
-    } catch (error) {
-      setMessage({ type: 'error', text: t('auth.networkError') })
+    } catch (error: any) {
+      console.error('Auth error:', error)
+      setMessage({
+        type: 'error',
+        text: error?.message || 'Network error. Please check your connection and try again.'
+      })
     } finally {
       setIsSubmitting(false)
     }
