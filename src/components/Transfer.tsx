@@ -19,7 +19,7 @@ interface BankAccount {
 
 export default function Transfer() {
   const { t } = useLanguage();
-  const { connected, publicKey, sendSOL, sendUSDC, sendUSDT } = usePhantomWallet();
+  const { connected, publicKey, sendSOL, sendUSDC, sendUSDT, balances } = usePhantomWallet();
   const [transferType, setTransferType] = useState<'crypto' | 'fiat'>('crypto');
   const [fromAccount, setFromAccount] = useState('');
   const [toAddress, setToAddress] = useState('');
@@ -30,6 +30,8 @@ export default function Transfer() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [estimatedFee] = useState('0.000005');
 
   useEffect(() => {
     loadAccounts();
@@ -53,11 +55,61 @@ export default function Transfer() {
     if (banksData) setBankAccounts(banksData);
   };
 
-  const handleTransfer = async (e: React.FormEvent) => {
+  const validateAddress = (address: string): boolean => {
+    if (transferType === 'crypto') {
+      return address.length >= 32 && address.length <= 44;
+    }
+    return address.includes('@');
+  };
+
+  const getAvailableBalance = (): number => {
+    if (transferType === 'crypto' && connected) {
+      if (currency === 'SOL') return balances.sol;
+      if (currency === 'USDC') return balances.usdc;
+      if (currency === 'USDT') return balances.usdt;
+    }
+    return 0;
+  };
+
+  const handleMaxAmount = () => {
+    const available = getAvailableBalance();
+    if (currency === 'SOL' && available > 0.001) {
+      setAmount((available - 0.001).toFixed(4));
+    } else {
+      setAmount(available.toFixed(2));
+    }
+  };
+
+  const handleTransferSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    if (!validateAddress(toAddress)) {
+      setError(transferType === 'crypto' ? 'Invalid wallet address' : 'Invalid email address');
+      return;
+    }
+
+    const transferAmount = parseFloat(amount);
+    const available = getAvailableBalance();
+
+    if (transferType === 'crypto' && transferAmount > available) {
+      setError(`Insufficient balance. Available: ${available.toFixed(4)} ${currency}`);
+      return;
+    }
+
+    if (transferAmount <= 0) {
+      setError('Amount must be greater than zero');
+      return;
+    }
+
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmTransfer = async () => {
     setLoading(true);
     setError(null);
     setSuccess(false);
+    setShowConfirmation(false);
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
@@ -123,7 +175,7 @@ export default function Transfer() {
         </button>
       </div>
 
-      <form onSubmit={handleTransfer} className="transfer-form">
+      <form onSubmit={handleTransferSubmit} className="transfer-form">
         <div className="form-group">
           <label>{t('transfer.from')}</label>
           <select
@@ -163,17 +215,35 @@ export default function Transfer() {
 
         <div className="form-row">
           <div className="form-group">
-            <label>{t('transfer.amount')}</label>
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="0.00"
-              className="form-input"
-              step="0.01"
-              min="0.01"
-              required
-            />
+            <label>
+              {t('transfer.amount')}
+              {transferType === 'crypto' && connected && (
+                <span className="balance-info">
+                  Available: {getAvailableBalance().toFixed(4)} {currency}
+                </span>
+              )}
+            </label>
+            <div className="amount-input-wrapper">
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0.00"
+                className="form-input"
+                step="0.01"
+                min="0.01"
+                required
+              />
+              {transferType === 'crypto' && connected && (
+                <button
+                  type="button"
+                  onClick={handleMaxAmount}
+                  className="max-btn"
+                >
+                  MAX
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="form-group">
@@ -223,15 +293,63 @@ export default function Transfer() {
         </button>
       </form>
 
+      {showConfirmation && (
+        <div className="confirmation-modal">
+          <div className="confirmation-content">
+            <h3>Confirm Transfer</h3>
+            <div className="confirmation-details">
+              <div className="detail-item">
+                <span className="detail-label">Amount:</span>
+                <span className="detail-value">{amount} {currency}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">To:</span>
+                <span className="detail-value">{toAddress.slice(0, 8)}...{toAddress.slice(-8)}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Network Fee:</span>
+                <span className="detail-value">{estimatedFee} SOL</span>
+              </div>
+              <div className="detail-item total">
+                <span className="detail-label">Total:</span>
+                <span className="detail-value">{(parseFloat(amount) + parseFloat(estimatedFee)).toFixed(6)} {currency}</span>
+              </div>
+            </div>
+            <div className="confirmation-actions">
+              <button
+                onClick={() => setShowConfirmation(false)}
+                className="cancel-btn"
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmTransfer}
+                className="confirm-btn"
+                disabled={loading}
+              >
+                {loading ? 'Processing...' : 'Confirm'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="transfer-info">
         <div className="info-item">
           <span className="info-label">{t('transfer.networkFee')}</span>
-          <span className="info-value">{transferType === 'crypto' ? '~$2.50' : '$0.00'}</span>
+          <span className="info-value">{transferType === 'crypto' ? `~${estimatedFee} SOL` : '$0.00'}</span>
         </div>
         <div className="info-item">
           <span className="info-label">{t('transfer.estimatedTime')}</span>
-          <span className="info-value">{transferType === 'crypto' ? '10-30 min' : '1-3 days'}</span>
+          <span className="info-value">{transferType === 'crypto' ? '10-30 sec' : '1-3 days'}</span>
         </div>
+        {transferType === 'crypto' && connected && (
+          <div className="info-item">
+            <span className="info-label">Your Balance:</span>
+            <span className="info-value">{getAvailableBalance().toFixed(4)} {currency}</span>
+          </div>
+        )}
       </div>
     </div>
   );
