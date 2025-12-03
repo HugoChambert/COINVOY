@@ -15,11 +15,13 @@
     "@supabase/supabase-js": "^2.81.1",
     "@types/three": "^0.181.0",
     "buffer": "^6.0.3",
+    "process": "^0.11.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "three": "^0.181.1"
   },
   "devDependencies": {
+    "@types/node": "^24.10.1",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.1",

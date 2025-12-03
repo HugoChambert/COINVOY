@@ -13,12 +13,12 @@ export default defineConfig(({ mode }) => {
     define: {
       'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(env.VITE_SUPABASE_URL),
       'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(env.VITE_SUPABASE_ANON_KEY),
-      'global': 'globalThis',
-      'Buffer': ['buffer', 'Buffer']
+      'global': 'globalThis'
     },
     resolve: {
       alias: {
-        buffer: 'buffer'
+        buffer: 'buffer',
+        process: 'process/browser'
       }
     },
     optimizeDeps: {
@@ -26,7 +26,8 @@ export default defineConfig(({ mode }) => {
         define: {
           global: 'globalThis'
         }
-      }
+      },
+      include: ['buffer']
     }
   }
 })
