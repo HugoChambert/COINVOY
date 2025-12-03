@@ -7,3 +7,9 @@
   pointer-events: none;
   z-index: 9999;
 }
+
+@media (max-width: 1024px) {
+  .cursor-trail {
+    display: none;
+  }
+}

@@ -37,3 +37,10 @@
   background: rgba(0, 0, 0, 0.1);
   border-color: rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 768px) {
+  .theme-switcher {
+    width: 44px;
+    height: 44px;
+  }
+}

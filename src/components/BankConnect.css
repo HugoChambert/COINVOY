@@ -262,3 +262,76 @@
 [data-theme="light"] .account-info {
   color: rgba(0, 0, 0, 0.5);
 }
+
+@media (max-width: 768px) {
+  .bank-connect {
+    padding: 1rem;
+  }
+
+  .bank-header {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .bank-header h3 {
+    font-size: 1rem;
+  }
+
+  .add-bank-btn {
+    width: 100%;
+  }
+
+  .add-bank-form {
+    padding: 1rem;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+  }
+
+  .form-hint {
+    font-size: 0.7rem;
+  }
+
+  .account-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .account-details {
+    align-items: center;
+  }
+
+  .remove-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .bank-header h3 {
+    font-size: 0.95rem;
+  }
+
+  .account-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .account-bank {
+    font-size: 0.85rem;
+  }
+
+  .account-info {
+    font-size: 0.75rem;
+  }
+
+  .empty-state {
+    padding: 1.5rem;
+  }
+
+  .empty-state p {
+    font-size: 0.85rem;
+  }
+}

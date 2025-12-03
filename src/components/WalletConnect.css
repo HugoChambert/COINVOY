@@ -291,3 +291,65 @@
 [data-theme="light"] .balance-value {
   color: #7537cc;
 }
+
+@media (max-width: 768px) {
+  .wallet-connect {
+    padding: 1rem;
+  }
+
+  .wallet-header {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .add-wallet-btn {
+    width: 100%;
+  }
+
+  .add-wallet-form {
+    padding: 1rem;
+  }
+
+  .phantom-balances {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wallet-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .wallet-details {
+    align-items: center;
+  }
+
+  .remove-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .phantom-balances {
+    grid-template-columns: 1fr;
+  }
+
+  .wallet-header h3 {
+    font-size: 1rem;
+  }
+
+  .wallet-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .wallet-type {
+    font-size: 0.85rem;
+  }
+
+  .wallet-address {
+    font-size: 0.75rem;
+    word-break: break-all;
+  }
+}
