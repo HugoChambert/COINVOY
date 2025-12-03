@@ -16,18 +16,18 @@ function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    checkAuth()
-  }, [])
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        setIsAuthenticated(true)
+        setCurrentPage('dashboard')
+      }
 
-    if (session) {
-      setIsAuthenticated(true)
-      setCurrentPage('dashboard')
+      setLoading(false)
     }
 
-    setLoading(false)
+    checkAuth()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
@@ -40,7 +40,7 @@ function App() {
     })
 
     return () => subscription.unsubscribe()
-  }
+  }, [])
 
   if (loading) {
     return (

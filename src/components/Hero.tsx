@@ -137,7 +137,17 @@ function Hero({ onNavigateToAuth }: HeroProps) {
           >
             {t('hero.startTransfer')}
           </button>
-          <button className="secondary-button glass-card">{t('hero.learnMore')}</button>
+          <button
+            className="secondary-button glass-card"
+            onClick={() => {
+              const featuresSection = document.querySelector('.features')
+              if (featuresSection) {
+                featuresSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              }
+            }}
+          >
+            {t('hero.learnMore')}
+          </button>
         </div>
       </div>
       {showContactForm && <ContactForm onClose={() => setShowContactForm(false)} />}
