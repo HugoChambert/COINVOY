@@ -250,15 +250,20 @@
   height: 100%;
   width: 3px;
   background: linear-gradient(180deg, #3b82f6, #8b5cf6);
-  transform: translateX(-3px);
+  transform: translateX(-100%);
   opacity: 0;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  visibility: hidden;
 }
 
 .nav-item:hover {
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.95);
   transform: translateX(4px);
+}
+
+.nav-item:hover::before {
+  visibility: hidden;
 }
 
 .nav-item.active {
@@ -270,6 +275,7 @@
 .nav-item.active::before {
   transform: translateX(0);
   opacity: 1;
+  visibility: visible;
 }
 
 .dashboard-main {

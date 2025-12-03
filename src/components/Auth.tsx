@@ -34,7 +34,6 @@ function Auth() {
         })
 
         if (error) {
-          console.error('Signup error:', error)
           setMessage({
             type: 'error',
             text: error.message || 'Signup failed. Please try again.'
@@ -52,7 +51,6 @@ function Auth() {
         })
 
         if (error) {
-          console.error('Sign in error:', error)
           setMessage({
             type: 'error',
             text: error.message || 'Sign in failed. Please check your credentials.'
@@ -65,10 +63,9 @@ function Auth() {
         }
       }
     } catch (error: any) {
-      console.error('Auth error:', error)
       setMessage({
         type: 'error',
-        text: error?.message || 'Network error. Please check your connection and try again.'
+        text: 'An error occurred. Please try again.'
       })
     } finally {
       setIsSubmitting(false)

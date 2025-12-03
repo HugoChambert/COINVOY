@@ -61,7 +61,6 @@ export default function WalletConnect({ userId }: WalletConnectProps) {
     try {
       await connect();
     } catch (error) {
-      console.error('Failed to connect Phantom:', error);
     }
   };
 
@@ -70,7 +69,6 @@ export default function WalletConnect({ userId }: WalletConnectProps) {
       await disconnect();
       loadWallets();
     } catch (error) {
-      console.error('Failed to disconnect Phantom:', error);
     }
   };
 

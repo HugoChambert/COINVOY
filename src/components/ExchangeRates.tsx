@@ -59,7 +59,6 @@ export default function ExchangeRates() {
       setLastUpdate(new Date());
       setLoading(false);
     } catch (error) {
-      console.error('Failed to fetch exchange rates:', error);
       setLoading(false);
     }
   };

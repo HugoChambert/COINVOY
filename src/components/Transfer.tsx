@@ -100,7 +100,6 @@ export default function Transfer() {
         setError('Failed to record transaction');
       }
     } catch (err) {
-      console.error('Transfer error:', err);
       setError(err instanceof Error ? err.message : 'Transfer failed');
     }
 

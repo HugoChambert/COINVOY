@@ -90,7 +90,6 @@ export const PhantomWalletProvider: React.FC<{ children: ReactNode }> = ({ child
         const usdcAccountInfo = await connection.getTokenAccountBalance(usdcTokenAccount);
         usdcBalance = parseFloat(usdcAccountInfo.value.uiAmount?.toString() || '0');
       } catch (e) {
-        console.log('No USDC account found');
       }
 
       try {
@@ -98,12 +97,10 @@ export const PhantomWalletProvider: React.FC<{ children: ReactNode }> = ({ child
         const usdtAccountInfo = await connection.getTokenAccountBalance(usdtTokenAccount);
         usdtBalance = parseFloat(usdtAccountInfo.value.uiAmount?.toString() || '0');
       } catch (e) {
-        console.log('No USDT account found');
       }
 
       setBalances({ sol: solBalance, usdc: usdcBalance, usdt: usdtBalance });
     } catch (error) {
-      console.error('Error fetching balances:', error);
     }
   };
 
@@ -119,7 +116,6 @@ export const PhantomWalletProvider: React.FC<{ children: ReactNode }> = ({ child
       setPublicKey(response.publicKey.toString());
       setConnected(true);
     } catch (error) {
-      console.error('Error connecting to Phantom:', error);
       throw error;
     } finally {
       setConnecting(false);
@@ -135,7 +131,6 @@ export const PhantomWalletProvider: React.FC<{ children: ReactNode }> = ({ child
       setConnected(false);
       setBalances({ sol: 0, usdc: 0, usdt: 0 });
     } catch (error) {
-      console.error('Error disconnecting from Phantom:', error);
       throw error;
     }
   };
@@ -167,7 +162,6 @@ export const PhantomWalletProvider: React.FC<{ children: ReactNode }> = ({ child
 
       return signature;
     } catch (error) {
-      console.error('Error sending SOL:', error);
       throw error;
     }
   };
@@ -205,7 +199,6 @@ export const PhantomWalletProvider: React.FC<{ children: ReactNode }> = ({ child
 
       return signature;
     } catch (error) {
-      console.error('Error sending USDC:', error);
       throw error;
     }
   };
@@ -243,7 +236,6 @@ export const PhantomWalletProvider: React.FC<{ children: ReactNode }> = ({ child
 
       return signature;
     } catch (error) {
-      console.error('Error sending USDT:', error);
       throw error;
     }
   };
