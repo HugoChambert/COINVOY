@@ -62,6 +62,7 @@ const bufferPolyfillPlugin = (): Plugin => {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
+    base: '/Coinvoy/', // Added for GitHub Pages deployment
     plugins: [bufferPolyfillPlugin(), react()],
     server: {
       hmr: {
